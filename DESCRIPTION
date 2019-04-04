@@ -1,0 +1,21 @@
+Package: levelnet
+Type: Package
+Title: Methods to Analyze One-mode Projections of Two-mode Networks
+Version: 0.1.0.9000
+Authors@R: person("David", "Schoch", email = "david.schoch@manchester.ac.uk", role = c("aut", "cre"))
+Maintainer: David Schoch <david.schoch@manchester.ac.uk>
+Description: Methods to analyze one-mode projections of two-mode networks
+URL: https://github.com/schochastics/levelnet
+BugReports: https://github.com/schochastics/levelnet/issues
+Depends: R (>= 3.0.1)
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+Imports: 
+    igraph,
+    Matrix,
+    Rcpp,
+    stats4
+LinkingTo: 
+    Rcpp

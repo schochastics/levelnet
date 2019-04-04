@@ -1,0 +1,6 @@
+^README\.Rmd$
+^LICENSE\.md$
+^.*\.Rproj$
+^\.Rproj\.user$
+R/testing.R
+R/testing_congress.R

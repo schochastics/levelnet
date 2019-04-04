@@ -1,0 +1,69 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+
+# levelnet
+
+levelnet is, so far, an early-stage R package that can be used to analyse two-mode networks and
+specifically their one-mode projection. The main purpose is to make several methods available that
+extract the *binary backbone* of a one-mode projection. The best documented and tested method is
+the *stochastic degree sequence model* (SDSM) by Z. Neal ([link](https://www.sciencedirect.com/science/article/pii/S0378873314000343)). It also implements
+the fairly unknown (but in the case of SDSM useful) scobit model.
+
+The package also contains a lot of undocumented functions, which can be ignored for now.
+
+## Installation
+
+You can install the developers version of levelnet with:
+
+```{r install, eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("schochastics/levelnet")
+```
+
+## Example of `sdsm`
+
+The package includes bill-cosponsorship data of the 115th Senate. Similar data was used in the
+Paper by Neal an in [follow up work](http://www.sciencedirect.com/science/article/pii/S0378873317303039). The function `bipartite_from_data_frame` can be used to turn the data frame into 
+a two-mode network (bipartite graph).
+
+```{r example,warning=FALSE,message=FALSE}
+library(igraph)
+library(levelnet)
+data("cosponsor_senate_15")
+head(cosponsor_senate_15)
+
+g <- bipartite_from_data_frame(cosponsor_senate_15,"name","bill")
+```
+
+The function `sdsm_diagnostic` checks the performance of several link function.
+The default optimization method for the MLE of the scobit model is "BFGS". However,
+I noticed that it often runs into convergence issues (like for this dataset). A more 
+robust method is "Nelder-Mead" which is a little bit more time consuming. You may still run
+into convergence problems. If so, try to adjust the parameter vector.
+```{r diagnostics,warning=FALSE,eval=TRUE}
+params <- list(b0=1e-5,b1=1e-5,b2=1e-5,b3=1e-5,a=0.8)
+sdsm_diagnostic(g,verbose=FALSE,params = params,method="Nelder-Mead")
+```
+
+As was noted in the paper, the scobit model produces the best fit of the data.
+
+```{r fit,eval=FALSE}
+params <- list(b0=1e-5,b1=1e-5,b2=1e-5,b3=1e-5,a=0.8)
+l <- sdsm(g,proj = "true",model="scobit",params = params,method="Nelder-Mead")
+```
+
+<img src="man/figures/README-graph.png" width="80%" style="display: block; margin: auto;"/>
+
