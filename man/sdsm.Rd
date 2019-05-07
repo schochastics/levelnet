@@ -5,8 +5,8 @@
 \title{Stochastic Degree Sequence Model}
 \usage{
 sdsm(g, proj = "true", model = "logit", max_iter = 1000,
-  alpha = 0.05, method = "BFGS", params = list(b0 = 0.1, b1 = 5e-05,
-  b2 = 5e-05, b3 = 5e-05, a = 0.01))
+  alpha = 0.05, params = list(b0 = 0.1, b1 = 5e-05, b2 = 5e-05, b3 =
+  5e-05, a = 0.01))
 }
 \arguments{
 \item{g}{igraph object. The two-mode network}
@@ -18,8 +18,6 @@ sdsm(g, proj = "true", model = "logit", max_iter = 1000,
 \item{max_iter}{number of randomly sampled networks}
 
 \item{alpha}{significance level}
-
-\item{method}{optimization method used for scobit}
 
 \item{params}{named parameter list for scobit model}
 }

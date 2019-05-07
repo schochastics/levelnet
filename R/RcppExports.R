@@ -21,3 +21,11 @@ isBipartite <- function(G, V, src) {
     .Call('_levelnet_isBipartite', PACKAGE = 'levelnet', G, V, src)
 }
 
+scobit_loglike_cpp <- function(x1, x2, y, params) {
+    .Call('_levelnet_scobit_loglike_cpp', PACKAGE = 'levelnet', x1, x2, y, params)
+}
+
+scobit_loglike_gr_cpp <- function(x1, x2, y, params) {
+    .Call('_levelnet_scobit_loglike_gr_cpp', PACKAGE = 'levelnet', x1, x2, y, params)
+}
+

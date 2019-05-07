@@ -15,7 +15,7 @@ Neal
 It also implements the fairly unknown (but in the case of SDSM useful)
 scobit model.
 
-The package also contains a lot of undocumented functions, which can be
+The package still contains a lot of undocumented functions, which can be
 ignored for now.
 
 ## Installation
@@ -23,8 +23,8 @@ ignored for now.
 You can install the developers version of levelnet with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("schochastics/levelnet")
+# install.packages("remotes")
+remotes::install_github("schochastics/levelnet")
 ```
 
 ## Example of `sdsm`
@@ -52,31 +52,41 @@ g <- bipartite_from_data_frame(cosponsor_senate_15,"name","bill")
 ```
 
 The function `sdsm_diagnostic` checks the performance of several link
-function. The default optimization method for the MLE of the scobit
-model is “BFGS”. However, I noticed that it often runs into convergence
-issues (like for this dataset). A more robust method is “Nelder-Mead”
-which is a little bit more time consuming. You may still run into
-convergence problems. If so, try to adjust the parameter vector.
+functions. The default optimization method for the MLE of the scobit
+model is “BFGS”. ~~However, I noticed that it often runs into
+convergence issues (like for this dataset). A more robust method is
+“Nelder-Mead” which is a little bit more time consuming. You may still
+run into convergence problems. If so, try to adjust the parameter
+vector.~~
+
+**Version 0.2.0 implements the gradients of the scobit function
+explicitly which facilitates the optimization**.
 
 ``` r
 params <- list(b0=1e-5,b1=1e-5,b2=1e-5,b3=1e-5,a=0.8)
-sdsm_diagnostic(g,verbose=FALSE,params = params,method="Nelder-Mead")
+sdsm_diagnostic(g,verbose=FALSE,params = params)
 ```
 
 <img src="man/figures/README-diagnostics-1.png" width="100%" />
 
     #>      name rmse_row rmse_col   time
-    #> 1   logit 32.58686 3.540320  0.024
-    #> 2  probit 28.82001 3.244426  0.049
-    #> 3 cloglog 39.50374 4.189334  0.029
-    #> 4  scobit 18.93134 2.770374 48.091
+    #> 1   logit 32.77512 3.534850  1.725
+    #> 2  probit 29.10691 3.275086  2.203
+    #> 3 cloglog 38.88990 4.171808  6.477
+    #> 4  scobit 15.37263 2.736871 37.541
+
+Note that there is no significant speed up for the scobit model to the
+previous version (runtime was ~50 sec). The gradient function is rather
+complicated and needs to be evaluated many times during the optimization
+process. This and the scobit function evaluation are the main
+bottleneck.
 
 As was noted in the paper, the scobit model produces the best fit of the
 data.
 
 ``` r
 params <- list(b0=1e-5,b1=1e-5,b2=1e-5,b3=1e-5,a=0.8)
-l <- sdsm(g,proj = "true",model="scobit",params = params,method="Nelder-Mead")
+l <- sdsm(g,proj = "true",model="scobit",params = params)
 ```
 
 <img src="man/figures/README-graph.png" width="80%" style="display: block; margin: auto;"/>
