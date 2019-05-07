@@ -104,6 +104,7 @@ sdsm <- function(g,proj="true",model="logit",max_iter=1000,alpha=0.05,
 #' @param verbose logical. print additional information (default: FALSE)
 #' @param method optimization method used for scobit
 #' @param params named parameter list for scobit model
+#' @param ... additional parameters passed to stats4::mle
 #' @return rmse and runtime of various models
 #' @author David Schoch
 #' @importFrom graphics abline par plot
@@ -111,7 +112,8 @@ sdsm <- function(g,proj="true",model="logit",max_iter=1000,alpha=0.05,
 #'
 sdsm_diagnostic <- function(g,proj="true",iter=10,verbose=FALSE,
                             method = "BFGS",
-                            params=list(b0=0.1,b1=0.00005,b2=0.00005,b3=0.00005,a=0.01)){
+                            params=list(b0=0.1,b1=0.00005,b2=0.00005,b3=0.00005,a=0.01),
+                            ...){
 
   if(!igraph::is_bipartite(g)){
     stop("network is not bipartite")
@@ -181,7 +183,7 @@ sdsm_diagnostic <- function(g,proj="true",iter=10,verbose=FALSE,
   }
 
   scobit_mle <- function(y,x1,x2){
-    mle.res <- stats4::mle(scobit_loglike, start = params,method = method)
+    mle.res <- stats4::mle(scobit_loglike, start = params,method = method,...)
 
     beta <- stats4::coef(mle.res)[1:4]
     alpha <- stats4::coef(mle.res)[5]
