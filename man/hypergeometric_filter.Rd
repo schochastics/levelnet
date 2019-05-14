@@ -4,12 +4,12 @@
 \alias{hypergeometric_filter}
 \title{hypergeometric filter}
 \usage{
-hypergeometric_filter(g, type = "true", alpha = 0.05)
+hypergeometric_filter(g, proj = "true", alpha = 0.05)
 }
 \arguments{
 \item{g}{igraph object. The two-mode network}
 
-\item{type}{which mode to project on}
+\item{proj}{which mode to project on}
 
 \item{alpha}{significants level}
 }

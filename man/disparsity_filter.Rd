@@ -4,10 +4,12 @@
 \alias{disparsity_filter}
 \title{Disparity Filter}
 \usage{
-disparsity_filter(g, alpha = 0.05, cut_mode = "or")
+disparsity_filter(g, proj = "true", alpha = 0.05, cut_mode = "or")
 }
 \arguments{
-\item{g}{igraph object. The two-mode network}
+\item{g}{igraph object. either two-mode or weighted network}
+
+\item{proj}{string. Which mode to project on ("true"/"false")}
 
 \item{alpha}{significants level}
 

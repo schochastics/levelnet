@@ -1,7 +1,8 @@
 #' @title Disparity Filter
 #' @description Extract significant edges with disparsity filter.
 #'
-#' @param g igraph object. The two-mode network
+#' @param g igraph object. either two-mode or weighted network
+#' @param proj string. Which mode to project on ("true"/"false")
 #' @param alpha significants level
 #' @param cut_mode 'and' or 'or'
 #' @return backbone of weighted network
@@ -10,9 +11,12 @@
 #' @export
 #'
 
-disparsity_filter <- function(g,alpha=0.05,cut_mode="or"){
+disparsity_filter <- function(g,proj="true",alpha=0.05,cut_mode="or"){
   if(!any(igraph::edge_attr_names(g)=="name")){
     igraph::V(g)$name <- 1:igraph::vcount(g)
+  }
+  if(igraph::is.bipartite(g)){
+    g <- igraph::bipartite_projection(g,which=proj)
   }
   cut_mode <- match.arg(cut_mode,c("and","or"))
   A <- igraph::get.adjacency(g,sparse=F,attr="weight")

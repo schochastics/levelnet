@@ -11,7 +11,7 @@ sdsm(g, proj = "true", model = "logit", max_iter = 1000,
 \arguments{
 \item{g}{igraph object. The two-mode network}
 
-\item{proj}{string. Which mode to project on}
+\item{proj}{string. Which mode to project on ("true"/"false")}
 
 \item{model}{string. which link to be used ('logit','probit','cloglog' or 'scobit')}
 

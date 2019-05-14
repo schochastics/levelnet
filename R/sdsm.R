@@ -2,7 +2,7 @@
 #' @description Stochastic Degree Sequence Model.
 
 #' @param g igraph object. The two-mode network
-#' @param proj string. Which mode to project on
+#' @param proj string. Which mode to project on ("true"/"false")
 #' @param model string. which link to be used ('logit','probit','cloglog' or 'scobit')
 #' @param max_iter number of randomly sampled networks
 #' @param alpha significance level

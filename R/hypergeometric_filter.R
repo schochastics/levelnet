@@ -2,16 +2,16 @@
 #' @description Extract significant edges with a hypergeometric distribution.
 #' @import igraph
 #' @param g igraph object. The two-mode network
-#' @param type which mode to project on
+#' @param proj which mode to project on
 #' @param alpha significants level
 #' @return backbone of weighted network
 #' @author David Schoch
 #' @export
 #'
 
-hypergeometric_filter <- function(g,type="true",alpha=0.05){
+hypergeometric_filter <- function(g,proj="true",alpha=0.05){
 
-  gb <- bipartite_projection(g,which = type)
+  gb <- bipartite_projection(g,proj = type)
   P <- get.adjacency(gb,"both",attr="weight",sparse = FALSE,)
   degs <- as.integer(degree(g)[V(g)$type==as.logical(type)])
   m <- vcount(g) - vcount(gb)
