@@ -3,7 +3,7 @@
 #'
 #' @param g igraph object
 #' @param k number of vectors to return
-#' @return dataframe of vectors
+#' @return data.frame of vectors
 #' @author David Schoch
 #' @export
 

@@ -12,7 +12,7 @@ laplacian_vectors(g, k = 2)
 \item{k}{number of vectors to return}
 }
 \value{
-dataframe of vectors
+data.frame of vectors
 }
 \description{
 Laplacian Vectors

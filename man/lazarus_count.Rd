@@ -11,7 +11,7 @@ lazarus_count(g, perm = NULL, mode = "cols")
 
 \item{perm}{permutation or NA}
 
-\item{mode}{one of "mcl", "cols" "rows" or "sym". See details}
+\item{mode}{one of "mcl", "cols" "rows" or "sym".}
 }
 \value{
 Lazarus count of g

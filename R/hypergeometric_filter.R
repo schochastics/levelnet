@@ -10,15 +10,11 @@
 #'
 
 hypergeometric_filter <- function(g,type="true",alpha=0.05){
-  cat("calculating projection\n")
-  gb <- bipartite_projection(g,which = type)
-  cat("getting matrix\n")
-  P <- get.adjacency(gb,"both",attr="weight",sparse = FALSE,)
 
+  gb <- bipartite_projection(g,which = type)
+  P <- get.adjacency(gb,"both",attr="weight",sparse = FALSE,)
   degs <- as.integer(degree(g)[V(g)$type==as.logical(type)])
   m <- vcount(g) - vcount(gb)
-
-  cat("calculate hypergeometric\n")
   H <- hypergeom(P,degs,m)
   hg <- graph_from_adjacency_matrix(H<=alpha,"undirected",diag = FALSE)
   hg

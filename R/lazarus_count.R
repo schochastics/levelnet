@@ -3,7 +3,7 @@
 #'
 #' @param g either an igraph object or a matrix
 #' @param perm permutation or NA
-#' @param mode one of "mcl", "cols" "rows" or "sym". See details
+#' @param mode one of "mcl", "cols" "rows" or "sym".
 #' @return Lazarus count of g
 #' @author David Schoch
 #' @export

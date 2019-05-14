@@ -70,10 +70,10 @@ sdsm_diagnostic(g,verbose=FALSE,params = params)
 <img src="man/figures/README-diagnostics-1.png" width="100%" />
 
     #>      name rmse_row rmse_col   time
-    #> 1   logit 32.77512 3.534850  1.725
-    #> 2  probit 29.10691 3.275086  2.203
-    #> 3 cloglog 38.88990 4.171808  6.477
-    #> 4  scobit 15.37263 2.736871 37.541
+    #> 1   logit 32.05265 3.525473  1.277
+    #> 2  probit 28.52139 3.240233  1.417
+    #> 3 cloglog 39.69981 4.237476  4.606
+    #> 4  scobit 14.95347 2.700943 33.174
 
 Note that there is no significant speed up for the scobit model to the
 previous version (runtime was ~50 sec). The gradient function is rather
