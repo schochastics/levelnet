@@ -55,25 +55,29 @@ sdsm <- function(g,proj="true",model="logit",max_iter=1000,alpha=0.05,
     x1 <- D_agent
     x2 <- D_artif
 
-    model.fit <- stats::optim(params,scobit_loglike_cpp,gr=scobit_loglike_gr_cpp,method="BFGS",x1=x1,x2=x2,y=y)
+    model.fit <- stats::optim(params,scobit_loglike_cpp,
+                              gr=scobit_loglike_gr_cpp,
+                              method="BFGS",
+                              x1=x1,x2=x2,y=y)
+
     pars <- c(model.fit$par[1],model.fit$par[2],model.fit$par[3],model.fit$par[4])
+
     df[["prob"]] <- scobit_fct(D_agent,D_artif,pars,model.fit$par[5])
   }
 
-  # print(summary(model.fit))
   P_test <- matrix(0,length(deg_agent),length(deg_agent))
 
   cat("    Simulating random networks\n")
-  pb <- utils::txtProgressBar(min = 1, max = max_iter, style = 3)
+  # pb <- utils::txtProgressBar(min = 1, max = max_iter, style = 3)
   for(i in 1:max_iter){
-    utils::setTxtProgressBar(pb,i)
+    # utils::setTxtProgressBar(pb,i)
     b_vec <- stats::runif(length(deg_agent)*length(deg_artif))
     B <- Matrix::Matrix((b_vec<=df[["prob"]])+0,length(deg_agent),length(deg_artif),sparse=T)
     # P_rand <- B%*%Matrix::t(B)
     P_rand <- eigenMatMult(B)
     P_test <- P_test + (P_rand >= P)+0
   }
-  close(pb)
+  # close(pb)
   A_new <- as.matrix((P_test<=alpha*max_iter)+0)
   l <- igraph::graph_from_adjacency_matrix(A_new,mode = "undirected",diag = F)
   igraph::V(l)$name <- igraph::V(bip)$name
