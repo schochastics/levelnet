@@ -264,6 +264,69 @@ bipartite_from_data_frame <- function(df,type1,type2){
   g
 }
 
+#' @title generate random roll-call votes based on ideology space
+#' @param M number of members
+#' @param D distance between means
+#' @param p dimension of space
+#' @param pd dimensioms where distributions are separated
+#' @param beta scaling parameter for probabilistic voting
+#' @param r radius of hypersphere for random generation
+#' @param noprob probabilit of non voting
+#' @param Nrand number of randomly generated votes
+#' @param N number of votes to sample from randomly generated votes
+#' @return list with random votes and ideologies
+#' @author David Schoch
+#' @references Aldrich, John H., and Montgomery, Jacob M., and Sparks, David B. (2014). Polarization and Ideology: Partisan Sources of Low Dimensionality in Scaled Roll Call Analyses. Political Analysis 22:435-456
+#' @export
+
+graph_random_vote <- function(M=101,D=1,p=4,pd=2,beta=1,r=9,noprob=0.05,Nrand=1000,N=525){
+  #sanity checks
+  if(pd>p){
+    stop("pd must be smaller than p")
+  }
+  if(N>Nrand){
+    stop("N must be smaller than Nrand")
+  }
+  if(M<2){
+    stop("M should be larger than 1")
+  }
+
+  n1 <- ceiling(M/2)
+  n2 <- M-n1
+
+  # create random ideologies according to parameters
+  xd <- matrix(stats::rnorm(n1*pd,D/2,1),nrow=n1,ncol=pd)
+  yd <- matrix(stats::rnorm(n2*pd,-D/2,1),nrow=n2,ncol=pd)
+  x <- matrix(stats::rnorm(n1*(p-pd),0,1),nrow=n1,ncol=p-pd)
+  y <- matrix(stats::rnorm(n2*(p-pd),0,1),nrow=n2,ncol=p-pd)
+  Mnames <- paste0("M",1:M)
+  x_tbl <- data.frame(cbind(xd,x),stringsAsFactors = FALSE)
+  x_tbl[["party"]] <- "D"
+  x_tbl[["name"]] <- Mnames[1:n1]
+  y_tbl <- data.frame(cbind(yd,y),stringsAsFactors = FALSE)
+  y_tbl[["party"]] <- "R"
+  y_tbl[["name"]] <- Mnames[(n1+1):M]
+
+  ideo_tbl <- rbind(x_tbl,y_tbl)
+  ideo_mat <-  as.matrix(ideo_tbl[,1:p])
+  ideo_tbl <- ideo_tbl[,c(p+2,p+1,1:p)]
+  names(ideo_tbl)[3:(p+2)] <- paste0("Dim",1:p)
+
+  sim <- replicate(Nrand,prob_vote(r=r,p=p,ideo_mat))
+
+  idx <- which(colSums(sim)<=(M*0.02) | colSums(sim) >= (M*0.98))
+  sim <- sim[,-idx]
+  sim <- sim[,sample(1:ncol(sim),N)]
+
+  res <- data.frame(name=rep(paste0("M",1:M),N),
+                    vote=c(sim), bill=rep(paste0("B",1:N),each=M),stringsAsFactors = FALSE)
+  not_vote <- which(stats::runif(nrow(res))<=noprob)
+  res <- res[-not_vote,]
+  res[["vote_ident"]] <- paste0(res[["bill"]],"_",res[["vote"]])
+  return(list(votes=res,ideo=ideo_tbl))
+}
+
+
 #helper
 circleFun <- function(center = c(0,0),r = 1, npoints = 20,skew = 0){
   ttseq <- seq(0,2*pi,length.out = npoints*100)
@@ -285,4 +348,27 @@ arc_dist <- function(x,y,r){
   c <- sqrt((x[1]-y[1])^2+(x[2]-y[2])^2)
   theta <- acos((2*r^2-c^2)/(2*r^2))
   2*pi*r*theta/(2*pi)
+}
+
+prob_vote <- function(r,p,x,beta=1){
+  a <- random_proposal(r,p)
+  b <- random_proposal(r,p)
+  wp <- 1/length(a)
+  dist_a <- t(apply(x,1,function(y) sqrt((y-a)^2)))
+  dist_b <- t(apply(x,1,function(y) sqrt((y-b)^2)))
+  if(p==1){
+    dist_a <- t(dist_a)
+    dist_b <- t(dist_b)
+  }
+  val <- beta * (rowSums(wp * dist_b^2)-rowSums(wp * dist_a^2))
+  probs <- stats::pnorm(val)
+  sapply(probs,function(x) sample(c(0,1),1,prob=c(x,1-x)))
+}
+
+random_proposal <- function(r,p){
+  pts <- stats::runif(p,-r,r)
+  while(sqrt(sum(pts^2))>r){
+    pts <- stats::runif(p,-r,r)
+  }
+  pts
 }

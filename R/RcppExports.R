@@ -9,6 +9,10 @@ arcDistMat <- function(X, r) {
     .Call('_levelnet_arcDistMat', PACKAGE = 'levelnet', X, r)
 }
 
+eigenMatMult <- function(A) {
+    .Call('_levelnet_eigenMatMult', PACKAGE = 'levelnet', A)
+}
+
 choose <- function(n, k) {
     .Call('_levelnet_choose', PACKAGE = 'levelnet', n, k)
 }

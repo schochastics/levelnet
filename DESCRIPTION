@@ -17,4 +17,5 @@ Imports:
     Matrix,
     Rcpp
 LinkingTo: 
-    Rcpp
+    Rcpp,
+    RcppEigen

@@ -113,3 +113,4 @@ robinson_max <- function(A){
 #' @importFrom Rcpp sourceCpp
 NULL
 
+

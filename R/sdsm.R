@@ -112,7 +112,8 @@ sdsm <- function(g,proj="true",model="logit",max_iter=1000,alpha=0.05,
     utils::setTxtProgressBar(pb,i)
     b_vec <- stats::runif(length(deg_agent)*length(deg_artif))
     B <- Matrix::Matrix((b_vec<=df[["prob"]])+0,length(deg_agent),length(deg_artif),sparse=T)
-    P_rand <- B%*%Matrix::t(B)
+    # P_rand <- B%*%Matrix::t(B)
+    P_rand <- eigenMatMult(B)
     P_test <- P_test + (P_rand >= P)+0
   }
   close(pb)

@@ -11,9 +11,9 @@
 
 hypergeometric_filter <- function(g,proj="true",alpha=0.05){
 
-  gb <- bipartite_projection(g,proj = type)
+  gb <- bipartite_projection(g,which = proj)
   P <- get.adjacency(gb,"both",attr="weight",sparse = FALSE,)
-  degs <- as.integer(degree(g)[V(g)$type==as.logical(type)])
+  degs <- as.integer(degree(g)[V(g)$type==as.logical(proj)])
   m <- vcount(g) - vcount(gb)
   H <- hypergeom(P,degs,m)
   hg <- graph_from_adjacency_matrix(H<=alpha,"undirected",diag = FALSE)
