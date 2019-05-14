@@ -12,7 +12,7 @@
 #'
 
 disparsity_filter <- function(g,proj="true",alpha=0.05,cut_mode="or"){
-  if(!any(igraph::edge_attr_names(g)=="name")){
+  if(!any(igraph::vertex_attr_names(g)=="name")){
     igraph::V(g)$name <- 1:igraph::vcount(g)
   }
   if(igraph::is.bipartite(g)){

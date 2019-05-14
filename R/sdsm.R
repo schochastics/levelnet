@@ -55,49 +55,6 @@ sdsm <- function(g,proj="true",model="logit",max_iter=1000,alpha=0.05,
     x1 <- D_agent
     x2 <- D_artif
 
-    # scobit_loglike_gr <- function(params){
-    #   b0 <- params[["b0"]]
-    #   b1 <- params[["b1"]]
-    #   b2 <- params[["b2"]]
-    #   b3 <- params[["b3"]]
-    #   a <- params[["a"]]
-    #
-    #   Fexp   <- exp(b0+b1*x1+b2*x2+b3*x1*x2)
-    #   Fexp1a <- (1+exp(b0+b1*x1+b2*x2+b3*x1*x2))^(-a)
-    #
-    #   derivFb0 <- -a*Fexp*(1+Fexp)^(-(a+1))
-    #   derivFb1 <- -a*Fexp*(1+Fexp)^(-(a+1))*x1
-    #   derivFb2 <- -a*Fexp*(1+Fexp)^(-(a+1))*x2
-    #   derivFb3 <- -a*Fexp*(1+Fexp)^(-(a+1))*x1*x2
-    #
-    #   derivFa  <- -log(1+Fexp)*Fexp1a
-    #
-    #   derivLb0 <- -1 * (-y/(1-Fexp1a) + (1-y)/(Fexp1a)) * derivFb0
-    #   derivLb1 <- -1 * (-y/(1-Fexp1a) + (1-y)/(Fexp1a)) * derivFb1 #*x1
-    #   derivLb2 <- -1 * (-y/(1-Fexp1a) + (1-y)/(Fexp1a)) * derivFb2 #*x2
-    #   derivLb3 <- -1 * (-y/(1-Fexp1a) + (1-y)/(Fexp1a)) * derivFb3 #*x1*x2
-    #   derivLa  <- -1 * (-y/(1-Fexp1a) + (1-y)/Fexp1a) * derivFa
-    #
-    #   c(sum(derivLb0,na.rm = T),
-    #     sum(derivLb1,na.rm = T),
-    #     sum(derivLb2,na.rm = T),
-    #     sum(derivLb3,na.rm = T),
-    #     sum(derivLa,na.rm = T))
-    # }
-    #
-    # scobit_loglike <- function(params){
-    #   b0 <- params[["b0"]]
-    #   b1 <- params[["b1"]]
-    #   b2 <- params[["b2"]]
-    #   b3 <- params[["b3"]]
-    #   a <- params[["a"]]
-    #   f <- -sum((1 - y)*log((1 + exp(b0+b1*x1+b2*x2+b3*x1*x2))^(-a)) +
-    #               y*log(1-(1+exp(b0+b1*x1+b2*x2+b3*x1*x2))^(-a)))
-    #
-    #   ifelse(is.na(f),1e10,f)
-    # }
-
-    # model.fit <- optim(params,scobit_loglike,gr=scobit_loglike_gr,method="BFGS")
     model.fit <- stats::optim(params,scobit_loglike_cpp,gr=scobit_loglike_gr_cpp,method="BFGS",x1=x1,x2=x2,y=y)
     pars <- c(model.fit$par[1],model.fit$par[2],model.fit$par[3],model.fit$par[4])
     df[["prob"]] <- scobit_fct(D_agent,D_artif,pars,model.fit$par[5])
@@ -124,22 +81,20 @@ sdsm <- function(g,proj="true",model="logit",max_iter=1000,alpha=0.05,
 }
 
 #' @title sdsm model diagnostics
-#' @description check which link function to use
+#' @description check which binary outcome model fits the data best
 #'
 #' @param g igraph object. The two-mode network
 #' @param proj string. Which mode to project on
 #' @param iter number of fits per model
 #' @param verbose logical. print additional information (default: FALSE)
 #' @param params named parameter list for scobit model
-#' @param ... additional parameters passed to stats4::mle
 #' @return rmse and runtime of various models
 #' @author David Schoch
 #' @importFrom graphics abline par plot
 #' @export
 #'
 sdsm_diagnostic <- function(g,proj="true",iter=10,verbose=FALSE,
-                            params=list(b0=0.1,b1=0.00005,b2=0.00005,b3=0.00005,a=0.01),
-                            ...){
+                            params=list(b0=0.1,b1=0.00005,b2=0.00005,b3=0.00005,a=0.01)){
 
   if(!igraph::is_bipartite(g)){
     stop("network is not bipartite")
@@ -203,49 +158,6 @@ sdsm_diagnostic <- function(g,proj="true",iter=10,verbose=FALSE,
   x1 <- D_agent
   x2 <- D_artif
 
-  # scobit_loglike_gr <- function(params){
-  #   b0 <- params[["b0"]]
-  #   b1 <- params[["b1"]]
-  #   b2 <- params[["b2"]]
-  #   b3 <- params[["b3"]]
-  #   a <- params[["a"]]
-  #
-  #   Fexp   <- exp(b0+b1*x1+b2*x2+b3*x1*x2)
-  #   Fexp1a <- (1+exp(b0+b1*x1+b2*x2+b3*x1*x2))^(-a)
-  #
-  #   derivFb0 <- -a*Fexp*(1+Fexp)^(-(a+1))
-  #   derivFb1 <- -a*Fexp*(1+Fexp)^(-(a+1))*x1
-  #   derivFb2 <- -a*Fexp*(1+Fexp)^(-(a+1))*x2
-  #   derivFb3 <- -a*Fexp*(1+Fexp)^(-(a+1))*x1*x2
-  #
-  #   derivFa  <- -log(1+Fexp)*Fexp1a
-  #
-  #   derivLb0 <- -1 * (-y/(1-Fexp1a) + (1-y)/(Fexp1a)) * derivFb0
-  #   derivLb1 <- -1 * (-y/(1-Fexp1a) + (1-y)/(Fexp1a)) * derivFb1 #*x1
-  #   derivLb2 <- -1 * (-y/(1-Fexp1a) + (1-y)/(Fexp1a)) * derivFb2 #*x2
-  #   derivLb3 <- -1 * (-y/(1-Fexp1a) + (1-y)/(Fexp1a)) * derivFb3 #*x1*x2
-  #   derivLa  <- -1 * (-y/(1-Fexp1a) + (1-y)/Fexp1a) * derivFa
-  #
-  #   c(sum(derivLb0,na.rm = T),
-  #     sum(derivLb1,na.rm = T),
-  #     sum(derivLb2,na.rm = T),
-  #     sum(derivLb3,na.rm = T),
-  #     sum(derivLa,na.rm = T))
-  # }
-  #
-  # scobit_loglike <- function(params){
-  #   b0 <- params[["b0"]]
-  #   b1 <- params[["b1"]]
-  #   b2 <- params[["b2"]]
-  #   b3 <- params[["b3"]]
-  #   a <- params[["a"]]
-  #   f <- -sum((1 - y)*log((1 + exp(b0+b1*x1+b2*x2+b3*x1*x2))^(-a)) +
-  #         y*log(1-(1+exp(b0+b1*x1+b2*x2+b3*x1*x2))^(-a)))
-  #
-  #   ifelse(is.na(f),1e10,f)
-  # }
-
-  # df_mod$time[m+1] <- system.time(model.fit <- optim(params,scobit_loglike,gr=scobit_loglike_gr,method="BFGS"))[[3]]
   df_mod$time[m+1] <- system.time(model.fit <- stats::optim(params,scobit_loglike_cpp,gr=scobit_loglike_gr_cpp,method="BFGS",x1=x1,x2=x2,y=y))[[3]]
   pars <- c(model.fit$par[1],model.fit$par[2],model.fit$par[3],model.fit$par[4])
   df[["prob"]] <- scobit_fct(D_agent,D_artif,pars,model.fit$par[5])

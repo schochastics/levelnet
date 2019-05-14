@@ -5,8 +5,7 @@
 \title{sdsm model diagnostics}
 \usage{
 sdsm_diagnostic(g, proj = "true", iter = 10, verbose = FALSE,
-  params = list(b0 = 0.1, b1 = 5e-05, b2 = 5e-05, b3 = 5e-05, a = 0.01),
-  ...)
+  params = list(b0 = 0.1, b1 = 5e-05, b2 = 5e-05, b3 = 5e-05, a = 0.01))
 }
 \arguments{
 \item{g}{igraph object. The two-mode network}
@@ -18,14 +17,12 @@ sdsm_diagnostic(g, proj = "true", iter = 10, verbose = FALSE,
 \item{verbose}{logical. print additional information (default: FALSE)}
 
 \item{params}{named parameter list for scobit model}
-
-\item{...}{additional parameters passed to stats4::mle}
 }
 \value{
 rmse and runtime of various models
 }
 \description{
-check which link function to use
+check which binary outcome model fits the data best
 }
 \author{
 David Schoch
