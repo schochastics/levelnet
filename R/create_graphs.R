@@ -157,8 +157,8 @@ graph_rectangle <- function(n,r=2,sd=0.5){
 #' @author David Schoch
 #' @export
 #
-graph_circ_arc <- function(n,r,pos=1/10,neg=1/10,skew=1){
-  pts <- circleFun(r=r,npoints=n)
+graph_circ_arc <- function(n,r,pos=1/10,neg=1/10,skew=0){
+  pts <- circleFun(r=r,npoints=n,skew = skew)
   # D1 <- matrix(0,n,n)
   # for(i in 1:n){
   #   for(j in 1:n){
@@ -333,10 +333,9 @@ circleFun <- function(center = c(0,0),r = 1, npoints = 20,skew = 0){
   if(skew==0){
     tt <- sample(ttseq,npoints)
   } else{
-    # probs <- abs(ttseq)/skew
     probs <- abs(sin(ttseq/skew))
     probs <- probs/sum(probs)
-    tt <- sample(ttseq,npoints,prob = probs)
+    tt <- sample(ttseq[order(probs)[1:(npoints*5)]],npoints)
   }
 
   xx <- center[1] + r * cos(tt)

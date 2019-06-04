@@ -2,6 +2,7 @@
 #' @description small functions to deal with typical network problems
 #'
 #' @param g igraph object.
+#' @param eattr edge attribute that contains 1/-1
 #' @name helpers
 #' @return igraph object
 #' @author David Schoch
@@ -37,18 +38,25 @@ clique_vertex_mat <- function(g){
 
 #' @rdname helpers
 #' @export
-count_triangle_type <- function(g){
+count_triangle_type <- function(g,eattr="type"){
+  if(!eattr%in%igraph::edge_attr_names(g)){
+    stop("edge attribute not found")
+  }
+  eattrV <- get.edge.attribute(g,eattr)
+  if(!all(eattrV%in%c(-1,1))){
+    stop("edge attribute may only contain -1 and 1")
+  }
   tmat <- t(matrix(igraph::triangles(g),nrow=3))
-  igraph::E(g)$typeI <- ifelse(igraph::E(g)$type=="pos",1,-1)
+  # igraph::E(g)$typeI <- ifelse(igraph::E(g)$type=="pos",1,-1)
 
   emat <- t(apply(tmat,1,function(x) c(igraph::get.edge.ids(g,x[1:2]),
                                        igraph::get.edge.ids(g,x[2:3]),
                                        igraph::get.edge.ids(g,x[c(3,1)]))))
 
 
-  emat[,1] <- igraph::E(g)$typeI[emat[,1]]
-  emat[,2] <- igraph::E(g)$typeI[emat[,2]]
-  emat[,3] <- igraph::E(g)$typeI[emat[,3]]
+  emat[,1] <- eattrV[emat[,1]]
+  emat[,2] <- eattrV[emat[,2]]
+  emat[,3] <- eattrV[emat[,3]]
   emat <- t(apply(emat,1,sort))
   emat_df <- as.data.frame(emat)
   res <- by(emat_df,list(emat_df[["V1"]],emat_df[["V2"]],emat_df[["V3"]]),

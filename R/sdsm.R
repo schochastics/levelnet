@@ -7,6 +7,7 @@
 #' @param max_iter number of randomly sampled networks
 #' @param alpha significance level
 #' @param params named parameter list for scobit model
+
 #' @return backbone of one-mode projection
 #' @author David Schoch
 #' @references Neal, Zachary (2014). The backbone of bipartite projections: Inferring relationships from co-authorship, co-sponsorship, co-attendance and other co-behaviors
@@ -32,8 +33,7 @@ sdsm <- function(g,proj="true",model="logit",max_iter=1000,alpha=0.05,
   proj_logi <- as.logical(proj)
 
   bip <- igraph::bipartite_projection(g,which=proj)
-  P <- igraph::get.adjacency(bip,attr = "weight",sparse=F)
-
+  P <- as.matrix(igraph::get.adjacency(bip,attr = "weight",sparse=T))
 
   deg_artif <- unname(igraph::degree(g)[igraph::V(g)$type!=proj_logi])
   deg_agent <- unname(igraph::degree(g)[igraph::V(g)$type==proj_logi])
@@ -115,7 +115,7 @@ sdsm_diagnostic <- function(g,proj="true",iter=10,verbose=FALSE,
   proj_logi <- as.logical(proj)
 
   bip <- igraph::bipartite_projection(g,which=proj)
-  P <- igraph::get.adjacency(bip,attr = "weight",sparse=F)
+  P <- as.matrix(igraph::get.adjacency(bip,attr = "weight",sparse=T))
 
 
   deg_artif <- unname(igraph::degree(g)[igraph::V(g)$type!=proj_logi])
@@ -192,5 +192,35 @@ scobit_fct <- function(x1,x2,beta,alpha){
   fct
 }
 
+#fast adjacency read ----
+# get.adjacency1 <- function(g,sparse = F){
+#   ed <- igraph::as_data_frame(g,"edges")
+#   if("name"%in%igraph::vertex_attr_names(g)){
+#     lvls <- igraph::V(g)$name
+#   } else{
+#     lvls <- sort(unique(c(ed$from,ed$to)))
+#   }
+#   ed[["from"]] <- factor(ed[["from"]],levels = lvls)
+#   ed[["to"]] <- factor(ed[["to"]],levels = lvls)
+#
+#   P1 <- with(ed, {
+#     out <- matrix(nrow=nlevels(from), ncol=nlevels(to),
+#                   dimnames=list(levels(from), levels(to)))
+#     out[cbind(from, to)] <- weight
+#     out
+#   })
+#
+#   P1[is.na(P1)] <- 0
+#   P1 <- P1+t(P1)
+#   if(!"name"%in%igraph::vertex_attr_names(g)){
+#     rownames(P1) <- NULL
+#     colnames(P1) <- NULL
+#   }
+#   if(sparse){
+#     as(P1,"dgTMatrix")
+#   } else{
+#     P1
+#   }
+# }
 
 

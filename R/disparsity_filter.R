@@ -19,7 +19,7 @@ disparsity_filter <- function(g,proj="true",alpha=0.05,cut_mode="or"){
     g <- igraph::bipartite_projection(g,which=proj)
   }
   cut_mode <- match.arg(cut_mode,c("and","or"))
-  A <- igraph::get.adjacency(g,sparse=F,attr="weight")
+  A <- as.matrix(igraph::get.adjacency(g,attr = "weight",sparse = T))
   n <- nrow(A)
   strength <- rowSums(A)
   B <- diag(1/strength) %*% A

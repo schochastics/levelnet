@@ -4,7 +4,7 @@
 \alias{graph_circ_arc}
 \title{circular arc graph}
 \usage{
-graph_circ_arc(n, r, pos = 1/10, neg = 1/10, skew = 1)
+graph_circ_arc(n, r, pos = 1/10, neg = 1/10, skew = 0)
 }
 \arguments{
 \item{n}{number of nodes}
