@@ -68,16 +68,16 @@ sdsm <- function(g,proj="true",model="logit",max_iter=1000,alpha=0.05,
   P_test <- matrix(0,length(deg_agent),length(deg_agent))
 
   cat("    Simulating random networks\n")
-  # pb <- utils::txtProgressBar(min = 1, max = max_iter, style = 3)
+  pb <- utils::txtProgressBar(min = 1, max = max_iter, style = 3)
   for(i in 1:max_iter){
-    # utils::setTxtProgressBar(pb,i)
+    utils::setTxtProgressBar(pb,i)
     b_vec <- stats::runif(length(deg_agent)*length(deg_artif))
     B <- Matrix::Matrix((b_vec<=df[["prob"]])+0,length(deg_agent),length(deg_artif),sparse=T)
     # P_rand <- B%*%Matrix::t(B)
     P_rand <- eigenMatMult(B)
     P_test <- P_test + (P_rand >= P)+0
   }
-  # close(pb)
+  close(pb)
   A_new <- as.matrix((P_test<=alpha*max_iter)+0)
   l <- igraph::graph_from_adjacency_matrix(A_new,mode = "undirected",diag = F)
   igraph::V(l)$name <- igraph::V(bip)$name
