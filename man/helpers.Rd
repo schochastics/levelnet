@@ -2,22 +2,21 @@
 % Please edit documentation in R/helpers.R
 \name{helpers}
 \alias{helpers}
-\alias{biggest_component}
 \alias{clique_vertex_mat}
 \alias{count_triangle_type}
 \alias{is_bipartite1}
 \title{helper function}
 \usage{
-biggest_component(g)
-
 clique_vertex_mat(g)
 
-count_triangle_type(g)
+count_triangle_type(g, eattr = "type")
 
 is_bipartite1(g)
 }
 \arguments{
 \item{g}{igraph object.}
+
+\item{eattr}{edge attribute that contains 1/-1}
 }
 \value{
 igraph object

@@ -11,13 +11,6 @@ NULL
 
 #' @rdname helpers
 #' @export
-biggest_component <- function(g) {
-  comps <- igraph::components(g,mode = "weak")
-  igraph::induced_subgraph(g,which(comps$membership==which.max(comps$csize)))
-}
-
-#' @rdname helpers
-#' @export
 clique_vertex_mat <- function(g){
   if(!igraph::is.igraph(g)){
     stop("g must be an igraph object")
