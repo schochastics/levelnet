@@ -2,7 +2,6 @@
 
 export(bipartite_from_data_frame)
 export(clique_vertex_mat)
-export(count_triangle_type)
 export(disparsity_filter)
 export(graph_circ_arc)
 export(graph_indifference)

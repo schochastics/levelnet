@@ -1,9 +1,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-
 # levelnet
+
+[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Travis build
+status](https://travis-ci.org/schochastics/levelnet.svg?branch=master)](https://travis-ci.org/schochastics/levelnet)
 
 levelnet is, so far, an early-stage R package that can be used to
 analyse two-mode networks and specifically their one-mode projection.
@@ -23,8 +25,8 @@ ignored for now.
 You can install the developers version of levelnet with:
 
 ``` r
-# install.packages("remotes")
-remotes::install_github("schochastics/levelnet")
+# install.packages("devtools")
+devtools::install_github("schochastics/levelnet")
 ```
 
 ## Example of `sdsm`
@@ -63,17 +65,17 @@ vector.~~
 explicitly which facilitates the optimization**.
 
 ``` r
-params <- list(b0=1e-5,b1=1e-5,b2=1e-5,b3=1e-5,a=0.8)
-sdsm_diagnostic(g,verbose=FALSE,params = params)
+params <- list(b0 = 1e-5,b1 = 1e-5,b2 = 1e-5,b3 = 1e-5,a = 0.8)
+sdsm_diagnostic(g,verbose = FALSE,params = params)
 ```
 
 <img src="man/figures/README-diagnostics-1.png" width="100%" />
 
     #>      name rmse_row rmse_col   time
-    #> 1   logit 32.05265 3.525473  1.277
-    #> 2  probit 28.52139 3.240233  1.417
-    #> 3 cloglog 39.69981 4.237476  4.606
-    #> 4  scobit 14.95347 2.700943 33.174
+    #> 1   logit 32.49987 3.539514  1.977
+    #> 2  probit 28.82683 3.265757  1.721
+    #> 3 cloglog 38.65148 4.156065  5.482
+    #> 4  scobit 14.45308 2.731727 35.594
 
 Note that there is no significant speed up for the scobit model to the
 previous version (runtime was ~50 sec). The gradient function is rather
@@ -85,8 +87,8 @@ As was noted in the paper, the scobit model produces the best fit of the
 data.
 
 ``` r
-params <- list(b0=1e-5,b1=1e-5,b2=1e-5,b3=1e-5,a=0.8)
-l <- sdsm(g,proj = "true",model="scobit",params = params)
+params <- list(b0 = 1e-5,b1 = 1e-5,b2 = 1e-5,b3 = 1e-5,a = 0.8)
+l <- sdsm(g,proj = "true",model = "scobit",params = params)
 ```
 
 <img src="man/figures/README-graph.png" width="80%" style="display: block; margin: auto;"/>

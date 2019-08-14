@@ -3,26 +3,21 @@
 \name{helpers}
 \alias{helpers}
 \alias{clique_vertex_mat}
-\alias{count_triangle_type}
 \alias{is_bipartite1}
 \title{helper function}
 \usage{
 clique_vertex_mat(g)
 
-count_triangle_type(g, eattr = "type")
-
 is_bipartite1(g)
 }
 \arguments{
 \item{g}{igraph object.}
-
-\item{eattr}{edge attribute that contains 1/-1}
 }
 \value{
 igraph object
 }
 \description{
-small functions to deal with typical network problems
+small helper functions
 }
 \author{
 David Schoch

@@ -5,3 +5,4 @@
 R/testing.R
 R/testing_congress.R
 R/scobit_gr.R
+^\.travis\.yml$
