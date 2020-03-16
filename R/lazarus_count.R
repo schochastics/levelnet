@@ -1,13 +1,21 @@
 #' @title Lazarus Count
 #' @description  Calculates the Lazarus count of a matrx/graph.
 #'
-#' @param g either an igraph object or a matrix
-#' @param perm permutation or NA
-#' @param mode one of "mcl", "cols" "rows" or "sym".
+#' @param g either an igraph object or a (0,1)-matrix
+#' @param perm permutation or NULL
+#' @param mode one of "mcl" (clique vertex matrix), "cols" (Lazarus count of columns) "rows" (Lazarus count of rows) or "sym" (Lazarus count of both columns and rows).
+#' @details The Lazarus count of a matrix is the number of "holes" in each column.
+#' A hole is a number of zero entries surrounded by ones. For an interval graph, this count is zero for the [clique_vertex_mat].
+#' If `perm` is NULL, a row permutation based on the Fiedler vector of the Laplacian is calculated.
 #' @return Lazarus count of g
 #' @author David Schoch
+#' @examples
+#' set.seed(10)
+#' #the lazarus count of an interval graph is zero
+#' g <- graph_interval(n = 10,r = 1)
+#' lazarus_count(g, mode = "mcl")
 #' @export
-lazarus_count <- function(g,perm=NULL,mode="cols"){
+lazarus_count <- function(g,perm = NULL,mode = "cols"){
   #cols,rows,sym,mcl
   if(is.null(perm)){
     perm <- order(fiedler_order(g,mode))
@@ -60,6 +68,7 @@ lazarus_count <- function(g,perm=NULL,mode="cols"){
 #'
 #' @param g igraph object
 #' @return Logical scalar, whether graph is an interval graph
+#' @details This function is not very efficient since it relies on the clique vertex matrix. More efficient linear time algorithms will be implemented in the future.
 #' @author David Schoch
 #' @export
 is_interval <- function(g){

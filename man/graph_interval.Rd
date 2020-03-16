@@ -2,22 +2,34 @@
 % Please edit documentation in R/create_graphs.R
 \name{graph_interval}
 \alias{graph_interval}
-\title{Interval graph}
+\title{Random Interval Graph}
 \usage{
 graph_interval(n, r = 2, sd = 0.5)
 }
 \arguments{
 \item{n}{number of nodes}
 
-\item{r}{radius}
+\item{r}{radius (see details)}
 
-\item{sd}{standard deviation}
+\item{sd}{standard deviation (see details)}
 }
 \value{
-interval graph as igraph object and interval representation
+interval graph as igraph object and interval representation as node attribute (a,b)
 }
 \description{
-Create a random interval graph.
+Create a random interval graph. In an interval graph, each node is characterized by an
+interval on the real line. Two nodes are connected, if their intervals overlap.
+}
+\details{
+Interval graphs are created as follows. First, n random points x are created uniformly at random between 0 and `r`.
+For each point, a value Y is created from a normal distribution with mean X and standard deviation is `sd`. In this way, it is
+possible to control the density of the network. The larger `r` and the larger `sd` the more likely do intervals overlap.
+}
+\examples{
+graph_interval(n = 10)
+}
+\seealso{
+[graph_indifference,graph_tolerance]
 }
 \author{
 David Schoch

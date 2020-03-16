@@ -1,11 +1,11 @@
 #' @title Disparity Filter
-#' @description Extract significant edges with disparsity filter.
+#' @description Extract significant edges of a weighted network or one-mode projection with the disparsity filter.
 #'
 #' @param g igraph object. either two-mode or weighted network
 #' @param proj string. Which mode to project on ("true"/"false")
-#' @param alpha significants level
-#' @param cut_mode 'and' or 'or'
-#' @return backbone of weighted network
+#' @param alpha significant level
+#' @param cut_mode 'and' (retain edge if both directions are significant) or 'or' (retain edge if one direction is significant)
+#' @return backbone of weighted network as igraph object
 #' @author David Schoch
 #' @references Serrano et al. (2009). Extracting the multiscale backbone of complex weighted networks
 #' @export
@@ -44,7 +44,6 @@ disparsity_filter <- function(g,proj="true",alpha=0.05,cut_mode="or"){
   }
   d
 }
-
 
 alpha_func <- function(x,k){
   (1-x)^(k-2)

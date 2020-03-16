@@ -1,8 +1,9 @@
 #' @title Multisweep Lex-BFS
-#' @description  Multisweep lexicograpical BFS to recoginze interval graphs.
+#' @description  Multisweep lexicograpical BFS
 #'
 #' @param g igraph object
 #' @param k number of sweeps
+#' @details LexBFS is used to recognize interval graphs. Not fully implemented yet.
 #' @return permutation
 #' @author David Schoch
 #' @export

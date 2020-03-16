@@ -1,4 +1,8 @@
-# levelnet 0.2.0.9000
+# levelnet 0.5.0
+
+* added more documentation
+
+# levelnet 0.2.0
 
 * MatMul is now done with RcppEigen (random network sim in sdsm now twice as fast)
 * implemented scobit function in C++

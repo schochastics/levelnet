@@ -14,7 +14,7 @@ bipartite_from_data_frame(df, type1, type2)
 \item{type2}{column name of mode 2}
 }
 \value{
-two mode network
+two mode network as igraph object
 }
 \description{
 Create a two-mode network from a data.frame

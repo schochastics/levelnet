@@ -1,76 +1,104 @@
-#' @title Interval graph
-#' @description  Create a random interval graph.
-#'
+#' @title Random Interval Graph
+#' @description  Create a random interval graph. In an interval graph, each node is characterized by an
+#' interval on the real line. Two nodes are connected, if their intervals overlap.
 #' @param n number of nodes
-#' @param r radius
-#' @param sd standard deviation
-#' @return interval graph as igraph object and interval representation
+#' @param r radius (see details)
+#' @param sd standard deviation (see details)
+#' @details Interval graphs are created as follows. First, n random points x are created uniformly at random between 0 and `r`.
+#' For each point, a value Y is created from a normal distribution with mean X and standard deviation is `sd`. In this way, it is
+#' possible to control the density of the network. The larger `r` and the larger `sd` the more likely do intervals overlap.
+#' @return interval graph as igraph object and interval representation as node attribute (a,b)
+#' @seealso [graph_indifference,graph_tolerance]
 #' @author David Schoch
+#' @examples
+#' graph_interval(n = 10)
 #' @export
 
-graph_interval <- function(n,r=2,sd=0.5){
+graph_interval <- function(n,r = 2,sd = 0.5){
+  if(missing(n)){
+    stop('argument "n" is missing with no default')
+  }
   x <- stats::runif(n,0,r)
   y <- stats::rnorm(n,x,sd)
-  xy <-  t(apply(cbind(x,y),1,sort))
-  colnames(xy) <- NULL
+  xy <- matrix(c(pmin(x,y),pmax(x,y)),ncol=2)
   a <- xy[,1]
   b <- xy[,2]
-  A <- matrix(0,n,n)
-  for(i in 1:n){
-    for(j in 1:n){
-      if((a[i]>=a[j] & a[i]<=b[j]) | (b[j]>=a[i] & b[j]<=b[i])){
-        A[i,j] <- 1
-      }
-    }
-  }
+
+  A <- ((outer(a,a,">=") & outer(a,b,"<=")) | (outer(a,b,"<=") & outer(b,b,">="))) + 0
+
   diag(A) <- 0
   g <- igraph::graph_from_adjacency_matrix(A,"undirected")
-  igraph::V(g)$a <- xy[,1]
-  igraph::V(g)$b <- xy[,2]
+  igraph::V(g)$a <- a
+  igraph::V(g)$b <- b
+  g$name <- "Interval Graph"
   return(g)
 }
 
-#' @title Indifference graph
-#' @description  Create a random indifference graph.
-#'
+#' @title Random Indifference Graph
+#' @description  Create a random indifference graph. An indifference graph is an interval graph where intervals
+#' have length 1.
 #' @param n number of nodes
 #' @param r radius
-#' @return indifference graph as igraph object and interval representation
+#' @details `n` points (x) are sampled uniformly at random between 0 and `r`. The interval is then given by (x,x+1)
+#' @return indifference graph as igraph object and interval representation (a,b)
+#' @seealso [graph_interval,graph_tolerance]
 #' @author David Schoch
+#' @examples
+#' graph_indifference(n = 10)
 #' @export
 
-graph_indifference <- function(n,r=2){
+graph_indifference <- function(n,r = 2){
+  if(missing(n)){
+    stop('argument "n" is missing with no default')
+  }
   x <- stats::runif(n,0,r)
   A <- outer(x,x,function(x,y) abs(x-y)<=1)+0
-  xy <-  t(apply(cbind(x,x+rep(1,n)),1,sort))
+  xy <-  cbind(x,x+rep(1,n))
   colnames(xy) <- NULL
   diag(A) <- 0
   g <- igraph::graph_from_adjacency_matrix(A,"undirected")
   igraph::V(g)$a <- xy[,1]
   igraph::V(g)$b <- xy[,2]
+  g$name <- "Indifference Graph"
   return(g)
 }
 
-#' @title Tolerance graph
-#' @description  Create a random interval graph.
+#' @title Random Tolerance Graph
+#' @description  Create a random tolerance graph. A tolerance graph is an interval graph, where nodes are
+#' only connected if the overlap is larger than a nodes tolerance level. These graphs are directed.
 #'
 #' @param n number of nodes
-#' @param r radius
-#' @param sd standard deviation
+#' @param r radius (see details)
+#' @param sd standard deviation (see details)
 #' @param tol tolerance
-#' @return interval graph as igraph object and interval representation
+#' @details Tolerance graphs are created as follows. First, n random points x are created uniformly at random between 0 and `r`.
+#' For each point, a value Y is created from a normal distribution with mean X and standard deviation is `sd`. In this way, it is
+#' possible to control the density of the network. The larger `r` and the larger `sd` the more likely do intervals overlap. When overlaps
+#' are calculated, it is checked whether the overlap is larger than the tolerance of the node. If so, the edge is included.
+#' @return tolerance graph as igraph object and interval representation and tolerance as node attributes
+#' @seealso [graph_interval,graph_indifference]
 #' @author David Schoch
+#' @examples
+#' graph_tolerance(n = 10)
 #' @export
 #
-graph_tolerance <- function(n,r=2,sd=0.5,tol=0.5){
+graph_tolerance <- function(n,r = 2,sd = 0.5,tol = 0.5){
+  if(missing(n)){
+    stop('argument "n" is missing with no default')
+  }
   x <- stats::runif(n,0,r)
   y <- stats::rnorm(n,x,sd)
   tol <- abs(stats::rnorm(n,0,tol))
-  xy <-  t(apply(cbind(x,y),1,sort))
+  xy <- matrix(c(pmin(x,y),pmax(x,y)),ncol=2)
   colnames(xy) <- NULL
   a <- xy[,1]
   b <- xy[,2]
   A <- matrix(0,n,n)
+  # TODO: properly vectorize
+  # (outer(a,a,">=") & outer(a,b,"<=") & outer(-a+b,tol,">")) +
+  #   (outer(a,a,"<=") & outer(b,a,">=") & outer(b,b,"<=") & outer(b-a,tol,">")) +
+  #   (outer(a,a,">=") & outer(b,b,"<=") & b-a>=tol) +
+  #   (outer(a,a,"<=") & outer(b,b,">=") & b-a>=tol)
   for(i in 1:n){
     for(j in 1:n){
       if(a[i]>=a[j] & a[i]<=b[j] ){
@@ -97,6 +125,8 @@ graph_tolerance <- function(n,r=2,sd=0.5,tol=0.5){
   igraph::V(g)$a <- xy[,1]
   igraph::V(g)$b <- xy[,2]
   igraph::V(g)$tolerance <- tol
+
+  g$name <- "Tolerance Graph"
   return(g)
 }
 
@@ -145,104 +175,13 @@ graph_rectangle <- function(n,r=2,sd=0.5){
   return(g)
 }
 
-#' @title circular arc graph
-#' @description  circular arc graph with positive and negative ties.
-#'
-#' @param n number of nodes
-#' @param r radius
-#' @param pos distance fraction between positive edges
-#' @param neg distance fraction between negative edges
-#' @param skew create clustered graph
-#' @return circular arc graph as igraph object
-#' @author David Schoch
-#' @export
-#
-graph_circ_arc <- function(n,r,pos=1/10,neg=1/10,skew=0){
-  pts <- circleFun(r=r,npoints=n,skew = skew)
-  # D1 <- matrix(0,n,n)
-  # for(i in 1:n){
-  #   for(j in 1:n){
-  #     D1[i,j] <- c(arc_dist(pts[i,],pts[j,],r))$x
-  #   }
-  # }
-  D <- arcDistMat(as.matrix(pts),r)
-  # print(D1-D)
-  thr <- (2*pi*r)*pos
-  anti <- arc_dist(c(0,r),c(0,-r),r)*(1-neg)
-  P <- (D<=thr & D!=0)+0
-  N <- (D>=anti & D!=0)+0
-
-  A <- P-N
-  g <- igraph::graph_from_adjacency_matrix(A,mode="undirected",weighted = T)
-  igraph::E(g)$type <- ifelse(igraph::E(g)$weight==1,"pos","neg")
-  g <- igraph::delete_edge_attr(g,"weight")
-  igraph::V(g)$x <- pts$x
-  igraph::V(g)$y <- pts$y
-  g
-}
-
-#' @title k partite graphs
-#' @description  Create a random k-partite graph.
-#'
-#' @param n number of nodes
-#' @param grp vector of partition sizes
-#' @return kpartite graph
-#' @author David Schoch
-#' @export
-
-graph_kpartite <- function(n=10,grp=c(5,5)){
-  g <- igraph::graph.empty(n=n,directed=FALSE)
-  cur_node <- 1
-  nodes <- 1:n
-  for(i in 1:(length(grp)-1)){
-    add_nodes <- cur_node:(cur_node + grp[i] - 1)
-    add_edges <- c(t(expand.grid(add_nodes,nodes[nodes>max(add_nodes)])))
-    g <- igraph::add.edges(g,add_edges)
-    cur_node <- cur_node + grp[i]
-  }
-  return(g)
-}
-
-#' @title convert igraph object to sage format
-#' @description  convert igraph object to sage format
-#'
-#' @param g igraph object
-#' @details
-#' sage code
-#'
-#' gis = g.is_interval(certificate=true)
-#'
-#'gis
-#'
-#'gisstr=str(gis)
-#'
-#'o = open('interval_raw.txt','w')
-#'
-#'o.write(gisstr)
-#'
-#'o.close()
-#'
-#'system('grep -oe "[0-9]\\+,\\s[0-9]\\+" interval_raw.txt > intervals.txt')
-#' @return sage string
-#' @author David Schoch
-#' @export
-
-graph_to_sage <- function(g){
-  igraph::V(g)$name <- 1:igraph::vcount(g)
-  tst <- igraph::get.adjlist(g)
-  gstr <- sapply(1:igraph::vcount(g),function(x)paste0(x,":","[",paste(tst[[x]],collapse = ","),"]"))
-  gstr <- paste(gstr,collapse = ",")
-  gstr <- paste0("g=Graph({",gstr,"})")
-  gstr
-}
-
 #' @title two-mode network from a data.frame
 #' @description Create a two-mode network from a data.frame
 #'
 #' @param df data.frame
 #' @param type1 column name of mode 1
 #' @param type2 column name of mode 2
-#' @return two mode network
+#' @return two mode network as igraph object
 #' @author David Schoch
 #' @export
 
@@ -328,27 +267,6 @@ graph_random_vote <- function(M=101,D=1,p=4,pd=2,beta=1,r=9,noprob=0.05,Nrand=10
 
 
 #helper
-circleFun <- function(center = c(0,0),r = 1, npoints = 20,skew = 0){
-  ttseq <- seq(0,2*pi,length.out = npoints*100)
-  if(skew==0){
-    tt <- sample(ttseq,npoints)
-  } else{
-    probs <- abs(sin(ttseq/skew))
-    probs <- probs/sum(probs)
-    tt <- sample(ttseq[order(probs)[1:(npoints*5)]],npoints)
-  }
-
-  xx <- center[1] + r * cos(tt)
-  yy <- center[2] + r * sin(tt)
-  return(data.frame(x = xx, y = yy))
-}
-
-arc_dist <- function(x,y,r){
-  c <- sqrt((x[1]-y[1])^2+(x[2]-y[2])^2)
-  theta <- acos((2*r^2-c^2)/(2*r^2))
-  2*pi*r*theta/(2*pi)
-}
-
 prob_vote <- function(r,p,x,beta=1){
   a <- random_proposal(r,p)
   b <- random_proposal(r,p)

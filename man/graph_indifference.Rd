@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_graphs.R
 \name{graph_indifference}
 \alias{graph_indifference}
-\title{Indifference graph}
+\title{Random Indifference Graph}
 \usage{
 graph_indifference(n, r = 2)
 }
@@ -12,10 +12,20 @@ graph_indifference(n, r = 2)
 \item{r}{radius}
 }
 \value{
-indifference graph as igraph object and interval representation
+indifference graph as igraph object and interval representation (a,b)
 }
 \description{
-Create a random indifference graph.
+Create a random indifference graph. An indifference graph is an interval graph where intervals
+have length 1.
+}
+\details{
+`n` points (x) are sampled uniformly at random between 0 and `r`. The interval is then given by (x,x+1)
+}
+\examples{
+graph_indifference(n = 10)
+}
+\seealso{
+[graph_interval,graph_tolerance]
 }
 \author{
 David Schoch

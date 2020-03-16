@@ -4,8 +4,17 @@
 \alias{graph_random_vote}
 \title{generate random roll-call votes based on ideology space}
 \usage{
-graph_random_vote(M = 101, D = 1, p = 4, pd = 2, beta = 1,
-  r = 9, noprob = 0.05, Nrand = 1000, N = 525)
+graph_random_vote(
+  M = 101,
+  D = 1,
+  p = 4,
+  pd = 2,
+  beta = 1,
+  r = 9,
+  noprob = 0.05,
+  Nrand = 1000,
+  N = 525
+)
 }
 \arguments{
 \item{M}{number of members}

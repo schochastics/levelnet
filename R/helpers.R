@@ -19,8 +19,6 @@ clique_vertex_mat <- function(g){
     g <- igraph::as.undirected(g)
   }
   mcl <- igraph::max_cliques(g)
-  # mcl <- lapply(mcl,sort)
-  # mcl <- mcl[order(unlist(lapply(mcl,sum)))]
   M <- matrix(0,length(mcl),igraph::vcount(g))
   for(i in 1:length(mcl)){
     M[i,mcl[[i]]] <- 1
@@ -44,41 +42,6 @@ is_bipartite1 <- function(g){
     }
     return(all(bip_bool))
   }
-}
-
-robinson_min <- function(A){
-  n <- nrow(A)
-  Anew <- matrix(NA,n,n)
-  for(i in 1:(n-1)){
-    for(j in (i+1):n){
-      if(i!=j){
-        a <- A[i,j]
-        b <- Anew[i,j-1]
-        c <- Anew[i+1,j]
-        Anew[i,j] <- Anew[j,i] <- min(c(a,b,c),na.rm = T)
-      }
-    }
-  }
-  diag(Anew) <- diag(A)
-  Anew
-}
-
-
-robinson_max <- function(A){
-  n <- nrow(A)
-  Anew <- matrix(NA,n,n)
-  for(i in 1:(n-1)){
-    for(j in (i+1):n){
-      if(i!=j){
-        a <- A[i,j]
-        b <- ifelse(j==n,NA,Anew[i,j+1])
-        c <- Anew[i-1,j]
-        Anew[i,j] <- Anew[j,i] <- min(c(a,b,c),na.rm = T)
-      }
-    }
-  }
-  diag(Anew) <- diag(A)
-  Anew
 }
 
 #' @useDynLib levelnet

@@ -4,8 +4,13 @@
 \alias{sdsm_diagnostic}
 \title{sdsm model diagnostics}
 \usage{
-sdsm_diagnostic(g, proj = "true", iter = 10, verbose = FALSE,
-  params = list(b0 = 0.1, b1 = 5e-05, b2 = 5e-05, b3 = 5e-05, a = 0.01))
+sdsm_diagnostic(
+  g,
+  proj = "true",
+  iter = 10,
+  verbose = FALSE,
+  params = list(b0 = 0.1, b1 = 5e-05, b2 = 5e-05, b3 = 5e-05, a = 0.01)
+)
 }
 \arguments{
 \item{g}{igraph object. The two-mode network}

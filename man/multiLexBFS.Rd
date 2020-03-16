@@ -15,7 +15,10 @@ multiLexBFS(g, k = 4)
 permutation
 }
 \description{
-Multisweep lexicograpical BFS to recoginze interval graphs.
+Multisweep lexicograpical BFS
+}
+\details{
+LexBFS is used to recognize interval graphs. Not fully implemented yet.
 }
 \author{
 David Schoch

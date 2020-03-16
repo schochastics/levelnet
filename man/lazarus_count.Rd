@@ -7,17 +7,28 @@
 lazarus_count(g, perm = NULL, mode = "cols")
 }
 \arguments{
-\item{g}{either an igraph object or a matrix}
+\item{g}{either an igraph object or a (0,1)-matrix}
 
-\item{perm}{permutation or NA}
+\item{perm}{permutation or NULL}
 
-\item{mode}{one of "mcl", "cols" "rows" or "sym".}
+\item{mode}{one of "mcl" (clique vertex matrix), "cols" (Lazarus count of columns) "rows" (Lazarus count of rows) or "sym" (Lazarus count of both columns and rows).}
 }
 \value{
 Lazarus count of g
 }
 \description{
 Calculates the Lazarus count of a matrx/graph.
+}
+\details{
+The Lazarus count of a matrix is the number of "holes" in each column.
+A hole is a number of zero entries surrounded by ones. For an interval graph, this count is zero for the [clique_vertex_mat].
+If `perm` is NULL, a row permutation based on the Fiedler vector of the Laplacian is calculated.
+}
+\examples{
+set.seed(10)
+#the lazarus count of an interval graph is zero
+g <- graph_interval(n = 10,r = 1)
+lazarus_count(g, mode = "mcl")
 }
 \author{
 David Schoch

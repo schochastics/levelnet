@@ -11,15 +11,15 @@ disparsity_filter(g, proj = "true", alpha = 0.05, cut_mode = "or")
 
 \item{proj}{string. Which mode to project on ("true"/"false")}
 
-\item{alpha}{significants level}
+\item{alpha}{significant level}
 
-\item{cut_mode}{'and' or 'or'}
+\item{cut_mode}{'and' (retain edge if both directions are significant) or 'or' (retain edge if one direction is significant)}
 }
 \value{
-backbone of weighted network
+backbone of weighted network as igraph object
 }
 \description{
-Extract significant edges with disparsity filter.
+Extract significant edges of a weighted network or one-mode projection with the disparsity filter.
 }
 \references{
 Serrano et al. (2009). Extracting the multiscale backbone of complex weighted networks

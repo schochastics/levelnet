@@ -15,6 +15,9 @@ Logical scalar, whether graph is an interval graph
 \description{
 Check whether graph is interval graph.
 }
+\details{
+This function is not very efficient since it relies on the clique vertex matrix. More efficient linear time algorithms will be implemented in the future.
+}
 \author{
 David Schoch
 }

@@ -2,24 +2,37 @@
 % Please edit documentation in R/create_graphs.R
 \name{graph_tolerance}
 \alias{graph_tolerance}
-\title{Tolerance graph}
+\title{Random Tolerance Graph}
 \usage{
 graph_tolerance(n, r = 2, sd = 0.5, tol = 0.5)
 }
 \arguments{
 \item{n}{number of nodes}
 
-\item{r}{radius}
+\item{r}{radius (see details)}
 
-\item{sd}{standard deviation}
+\item{sd}{standard deviation (see details)}
 
 \item{tol}{tolerance}
 }
 \value{
-interval graph as igraph object and interval representation
+tolerance graph as igraph object and interval representation and tolerance as node attributes
 }
 \description{
-Create a random interval graph.
+Create a random tolerance graph. A tolerance graph is an interval graph, where nodes are
+only connected if the overlap is larger than a nodes tolerance level. These graphs are directed.
+}
+\details{
+Tolerance graphs are created as follows. First, n random points x are created uniformly at random between 0 and `r`.
+For each point, a value Y is created from a normal distribution with mean X and standard deviation is `sd`. In this way, it is
+possible to control the density of the network. The larger `r` and the larger `sd` the more likely do intervals overlap. When overlaps
+are calculated, it is checked whether the overlap is larger than the tolerance of the node. If so, the edge is included.
+}
+\examples{
+graph_tolerance(n = 10)
+}
+\seealso{
+[graph_interval,graph_indifference]
 }
 \author{
 David Schoch

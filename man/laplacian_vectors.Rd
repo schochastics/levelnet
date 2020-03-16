@@ -2,7 +2,7 @@
 % Please edit documentation in R/laplacian_vectors.R
 \name{laplacian_vectors}
 \alias{laplacian_vectors}
-\title{laplacian Vectors}
+\title{Laplacian Vectors}
 \usage{
 laplacian_vectors(g, k = 2)
 }
@@ -15,7 +15,7 @@ laplacian_vectors(g, k = 2)
 data.frame of vectors
 }
 \description{
-Laplacian Vectors
+Returns Laplacian eigenvectors associated with the k smallest positive eigenvalues
 }
 \author{
 David Schoch

@@ -1,5 +1,5 @@
-#' @title laplacian Vectors
-#' @description  Laplacian Vectors
+#' @title Laplacian Vectors
+#' @description  Returns Laplacian eigenvectors associated with the k smallest positive eigenvalues
 #'
 #' @param g igraph object
 #' @param k number of vectors to return
