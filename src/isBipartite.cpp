@@ -53,8 +53,7 @@ bool isBipartite(IntegerMatrix G,int V, int src)
     }
   }
 
-  // If we reach here, then all adjacent
-  // vertices can be colored with alternate color
+  // If we reach here, then all adjacent vertices can be colored with alternate color
   return true;
 }
 

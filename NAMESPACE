@@ -3,6 +3,7 @@
 export(bipartite_from_data_frame)
 export(clique_vertex_mat)
 export(disparsity_filter)
+export(fiedler_order)
 export(graph_indifference)
 export(graph_interval)
 export(graph_random_vote)

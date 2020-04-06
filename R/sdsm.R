@@ -7,6 +7,7 @@
 #' @param max_iter number of randomly sampled networks
 #' @param alpha significance level
 #' @param params named parameter list for scobit model
+#' @param verbose print status during execution
 
 #' @return backbone of one-mode projection
 #' @author David Schoch
@@ -14,7 +15,8 @@
 #' @export
 #'
 sdsm <- function(g,proj="true",model="logit",max_iter=1000,alpha=0.05,
-                 params=list(b0=0.1,b1=0.00005,b2=0.00005,b3=0.00005,a=0.01)){
+                 params=list(b0=0.1,b1=0.00005,b2=0.00005,b3=0.00005,a=0.01),
+                 verbose = FALSE){
   if(!igraph::is_bipartite(g)){
     stop("network is not bipartite")
   }
@@ -45,7 +47,9 @@ sdsm <- function(g,proj="true",model="logit",max_iter=1000,alpha=0.05,
   D_artif <- rep(deg_artif,each=length(deg_agent))
   resp <- c(A)
   df <- data.frame(resp,D_agent,D_artif)
-  cat(paste0("    Fitting ",model," model\n"))
+  if(verbose){
+    message(paste0("    Fitting ",model," model\n"))
+  }
   if(model!="scobit"){
     model.fit <- stats::glm(resp ~ D_agent + D_artif + D_agent * D_artif,
                      family = stats::binomial(link = model),data = df)
@@ -66,18 +70,23 @@ sdsm <- function(g,proj="true",model="logit",max_iter=1000,alpha=0.05,
   }
 
   P_test <- matrix(0,length(deg_agent),length(deg_agent))
-
-  cat("    Simulating random networks\n")
-  pb <- utils::txtProgressBar(min = 1, max = max_iter, style = 3)
+  if(verbose){
+    message("    Simulating random networks\n")
+    pb <- utils::txtProgressBar(min = 1, max = max_iter, style = 3)
+  }
   for(i in 1:max_iter){
-    utils::setTxtProgressBar(pb,i)
+    if(verbose){
+      utils::setTxtProgressBar(pb,i)
+    }
     b_vec <- stats::runif(length(deg_agent)*length(deg_artif))
     B <- Matrix::Matrix((b_vec<=df[["prob"]])+0,length(deg_agent),length(deg_artif),sparse=T)
-    # P_rand <- B%*%Matrix::t(B)
-    P_rand <- eigenMatMult(B)
+    # P_rand <- eigenMatMult(B)
+    P_rand <- Matrix::tcrossprod(B)
     P_test <- P_test + (P_rand >= P)+0
   }
-  close(pb)
+  if(verbose){
+    close(pb)
+  }
   A_new <- as.matrix((P_test<=alpha*max_iter)+0)
   l <- igraph::graph_from_adjacency_matrix(A_new,mode = "undirected",diag = F)
   igraph::V(l)$name <- igraph::V(bip)$name
@@ -131,6 +140,7 @@ sdsm_diagnostic <- function(g,proj="true",iter=10,verbose=FALSE,
   models <- c("logit","probit","cloglog")
   df_mod <- data.frame(name=c(models,"scobit"),rmse_row=rep(0,length(models)+1),
                        rmse_col=rep(0,length(models)+1),time=rep(0,length(models)+1))
+  bkp <- par()$mfcol
   par(mfcol=c(2,4))
   for(m in seq_along(models)){
     if(verbose){
@@ -156,7 +166,7 @@ sdsm_diagnostic <- function(g,proj="true",iter=10,verbose=FALSE,
     abline(0,1)
   }
   if(verbose){
-    cat("fitting scobit model\n")
+    message("fitting scobit model\n")
   }
   y  <- resp
   x1 <- D_agent
@@ -177,7 +187,7 @@ sdsm_diagnostic <- function(g,proj="true",iter=10,verbose=FALSE,
   abline(0,1)
   plot(colSums(A),Matrix::colSums(B),main=paste0("scobit", "(cols)"),xlab="data",ylab="sample")
   abline(0,1)
-
+  par(mfcol=bkp)
   df_mod$rmse_row <- df_mod$rmse_row/iter
   df_mod$rmse_col <- df_mod$rmse_col/iter
   df_mod

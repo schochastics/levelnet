@@ -10,7 +10,8 @@ sdsm(
   model = "logit",
   max_iter = 1000,
   alpha = 0.05,
-  params = list(b0 = 0.1, b1 = 5e-05, b2 = 5e-05, b3 = 5e-05, a = 0.01)
+  params = list(b0 = 0.1, b1 = 5e-05, b2 = 5e-05, b3 = 5e-05, a = 0.01),
+  verbose = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ sdsm(
 \item{alpha}{significance level}
 
 \item{params}{named parameter list for scobit model}
+
+\item{verbose}{print status during execution}
 }
 \value{
 backbone of one-mode projection

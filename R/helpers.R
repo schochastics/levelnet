@@ -29,7 +29,7 @@ clique_vertex_mat <- function(g){
 #' @rdname helpers
 #' @export
 is_bipartite1 <- function(g){
-  adj <- igraph::get.adjacency(g,"both",sparse=F)
+  adj <- igraph::as_adj(g,"both",sparse=F)
   comps <- igraph::components(g,"weak")
   if(comps$no==1){
     return(isBipartite(adj,igraph::vcount(g),1))
@@ -37,7 +37,7 @@ is_bipartite1 <- function(g){
     bip_bool <- rep(F,comps$no)
     for(i in 1:comps$no){
       g1 <- igraph::induced_subgraph(g,which(comps$membership==i))
-      adj <- igraph::get.adjacency(g1,"both",sparse=F)
+      adj <- igraph::as_adj(g1,"both",sparse=F)
       bip_bool[i] <- isBipartite(adj,igraph::vcount(g1),1)
     }
     return(all(bip_bool))

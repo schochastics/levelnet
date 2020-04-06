@@ -77,6 +77,14 @@ is_interval <- function(g){
   lz==0
 }
 
+#' @title Permutation induced by Fiedler vector
+#' @description  Returns the permutation induced by sorting the Fiedler vector of the Laplacian matrix of a graph
+#'
+#' @param g an igraph object or a (0,1)-matrix
+#' @param mode one of "mcl" (clique vertex matrix), "cols" (Lazarus count of columns) "rows" (Lazarus count of rows) or "sym" (Lazarus count of both columns and rows).
+#' @return numeric vector
+#' @author David Schoch
+#' @export
 fiedler_order <- function(g,mode="cols"){
   #cols, rows, mcl
   if(mode=="mcl" & !igraph::is.igraph(g)){
