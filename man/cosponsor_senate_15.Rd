@@ -4,7 +4,9 @@
 \name{cosponsor_senate_15}
 \alias{cosponsor_senate_15}
 \title{Bill cosponsorship data for the 115th Senate}
-\format{a data frame of bill cosponsorships}
+\format{
+a data frame of bill cosponsorships
+}
 \usage{
 cosponsor_senate_15
 }

@@ -2,6 +2,7 @@
 % Please edit documentation in R/sdsm.R
 \name{sdsm}
 \alias{sdsm}
+\alias{sdsm_prob}
 \title{Stochastic Degree Sequence Model}
 \usage{
 sdsm(
@@ -10,6 +11,15 @@ sdsm(
   model = "logit",
   max_iter = 1000,
   alpha = 0.05,
+  params = list(b0 = 0.1, b1 = 5e-05, b2 = 5e-05, b3 = 5e-05, a = 0.01),
+  verbose = FALSE
+)
+
+sdsm_prob(
+  g,
+  proj = "true",
+  model = "logit",
+  max_iter = 1000,
   params = list(b0 = 0.1, b1 = 5e-05, b2 = 5e-05, b3 = 5e-05, a = 0.01),
   verbose = FALSE
 )
