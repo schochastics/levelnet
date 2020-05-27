@@ -140,8 +140,8 @@ sdsm_diagnostic <- function(g,proj="true",iter=10,verbose=FALSE,
   models <- c("logit","probit","cloglog")
   df_mod <- data.frame(name=c(models,"scobit"),rmse_row=rep(0,length(models)+1),
                        rmse_col=rep(0,length(models)+1),time=rep(0,length(models)+1))
-  bkp <- par()$mfcol
-  par(mfcol=c(2,4))
+  # bkp <- par()$mfcol
+  # par(mfcol=c(2,4))
   for(m in seq_along(models)){
     if(verbose){
       cat(paste0("fitting ",models[m]," model\n"))
@@ -160,10 +160,10 @@ sdsm_diagnostic <- function(g,proj="true",iter=10,verbose=FALSE,
       df_mod$rmse_row[m] <- df_mod$rmse_row[m]+res[1]
       df_mod$rmse_col[m] <- df_mod$rmse_col[m]+res[2]
     }
-    plot(rowSums(A),Matrix::rowSums(B),main=paste0(models[m], "(rows)"),xlab="data",ylab="sample")
-    abline(0,1)
-    plot(colSums(A),Matrix::colSums(B),main=paste0(models[m], "(cols)"),xlab="data",ylab="sample")
-    abline(0,1)
+    # plot(rowSums(A),Matrix::rowSums(B),main=paste0(models[m], "(rows)"),xlab="data",ylab="sample")
+    # abline(0,1)
+    # plot(colSums(A),Matrix::colSums(B),main=paste0(models[m], "(cols)"),xlab="data",ylab="sample")
+    # abline(0,1)
   }
   if(verbose){
     message("fitting scobit model\n")
@@ -183,11 +183,11 @@ sdsm_diagnostic <- function(g,proj="true",iter=10,verbose=FALSE,
     df_mod$rmse_row[m+1] <- df_mod$rmse_row[m+1]+res[1]
     df_mod$rmse_col[m+1] <- df_mod$rmse_col[m+1]+res[2]
   }
-  plot(rowSums(A),Matrix::rowSums(B),main=paste0("scobit", "(rows)"),xlab="data",ylab="sample")
-  abline(0,1)
-  plot(colSums(A),Matrix::colSums(B),main=paste0("scobit", "(cols)"),xlab="data",ylab="sample")
-  abline(0,1)
-  par(mfcol=bkp)
+  # plot(rowSums(A),Matrix::rowSums(B),main=paste0("scobit", "(rows)"),xlab="data",ylab="sample")
+  # abline(0,1)
+  # plot(colSums(A),Matrix::colSums(B),main=paste0("scobit", "(cols)"),xlab="data",ylab="sample")
+  # abline(0,1)
+  # par(mfcol=bkp)
   df_mod$rmse_row <- df_mod$rmse_row/iter
   df_mod$rmse_col <- df_mod$rmse_col/iter
   df_mod
