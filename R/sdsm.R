@@ -17,6 +17,7 @@
 sdsm <- function(g,proj="true",model="logit",max_iter=1000,alpha=0.05,
                  params=list(b0=0.1,b1=0.00005,b2=0.00005,b3=0.00005,a=0.01),
                  verbose = FALSE){
+  warning("This function is deprecated and will be removed in a future release. Please use the `sdsm` function of the `backbone` package.")
   if(!igraph::is_bipartite(g)){
     stop("network is not bipartite")
   }
