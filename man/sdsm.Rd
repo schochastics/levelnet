@@ -45,6 +45,9 @@ backbone of one-mode projection
 \description{
 Stochastic Degree Sequence Model.
 }
+\details{
+THIS FUNCTION IS DEPRECATED. PLEASE USE THE sdsm() FUNCTION OF THE BACKBONE PACKAGE
+}
 \references{
 Neal, Zachary (2014). The backbone of bipartite projections: Inferring relationships from co-authorship, co-sponsorship, co-attendance and other co-behaviors
 }

@@ -3,11 +3,12 @@
 #'
 #' @param g igraph object
 #' @param dim integer. target boxicity (1-5)
+#' @param iter number of iterations for simulated annealing step
 #' @importFrom igraph vcount as_adj delete.vertices neighborhood
 #' @importFrom stats optim
 #' @export
 
-superbox_graph <- function(g,dim,iter=500000){
+superbox_graph <- function(g,dim,iter=50000){
   if(!igraph::is.igraph(g)){
     stop("g must be an igraph object")
   }
@@ -204,7 +205,9 @@ create_superbox5 <- function(l){
 # create interval graph from permutation
 perm2int <- function(N,perm){
 
-  xy <- getxy_cpp(N,perm)
+  # xy <- getxy_cpp(N,perm)
+  Nperm <- lapply(N,function(x) perm[x])
+  xy <- cbind(sapply(Nperm,function(x) c(min(x))),perm)
   a <- xy[,1]
   b <- xy[,2]
 
@@ -508,7 +511,8 @@ ged5 <- function(sq,A,adj){
 }
 
 struct_equi <- function(g) {
-  adj <- lapply(igraph::get.adjlist(g), function(x) x - 1)
+  # adj <- lapply(igraph::get.adjlist(g), function(x) x - 1)
+  adj <- lapply(igraph::neighborhood(g,mindist = 1), function(x) x - 1)
   deg <- igraph::degree(g)
   P <- mse(adj, deg)
   MSE <- which((P + t(P)) == 2, arr.ind = T)

@@ -8,7 +8,7 @@
 #' @param alpha significance level
 #' @param params named parameter list for scobit model
 #' @param verbose print status during execution
-
+#' @details THIS FUNCTION IS DEPRECATED. PLEASE USE THE sdsm() FUNCTION OF THE BACKBONE PACKAGE
 #' @return backbone of one-mode projection
 #' @author David Schoch
 #' @references Neal, Zachary (2014). The backbone of bipartite projections: Inferring relationships from co-authorship, co-sponsorship, co-attendance and other co-behaviors
@@ -17,7 +17,7 @@
 sdsm <- function(g,proj="true",model="logit",max_iter=1000,alpha=0.05,
                  params=list(b0=0.1,b1=0.00005,b2=0.00005,b3=0.00005,a=0.01),
                  verbose = FALSE){
-  warning("This function is deprecated and will be removed in a future release. Please use the `sdsm` function of the `backbone` package.")
+  stop("This function is deprecated and will be removed in a future release. Please use the `sdsm` function of the `backbone` package.")
   if(!igraph::is_bipartite(g)){
     stop("network is not bipartite")
   }

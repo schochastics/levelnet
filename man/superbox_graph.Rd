@@ -4,7 +4,7 @@
 \alias{superbox_graph}
 \title{Supergraph with low boxicity}
 \usage{
-superbox_graph(g, dim)
+superbox_graph(g, dim, iter = 5e+05)
 }
 \arguments{
 \item{g}{igraph object}
