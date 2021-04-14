@@ -15,7 +15,6 @@ IntegerMatrix getA_cpp(NumericVector x,NumericVector y){
   return A;
 }
 
-// [[Rcpp::export]]
 IntegerMatrix getxy_cpp(List N,IntegerVector perm){
   int n = perm.length();
   IntegerMatrix xy(n,2);

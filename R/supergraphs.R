@@ -218,8 +218,13 @@ perm2int <- function(N,perm){
 
 perm2box <- function(N,perm1,perm2){
 
-  xy1 <- getxy_cpp(N,perm1)
-  xy2 <- getxy_cpp(N,perm2)
+  # xy1 <- getxy_cpp(N,perm1)
+  # xy2 <- getxy_cpp(N,perm2)
+  Nperm <- lapply(N,function(x) perm1[x])
+  xy1 <- cbind(sapply(Nperm,function(x) c(min(x))),perm1)
+
+  Nperm <- lapply(N,function(x) perm2[x])
+  xy2   <- cbind(sapply(Nperm,function(x) c(min(x))),perm2)
 
   a <- xy1[,1]
   b <- xy1[,2]
@@ -238,9 +243,17 @@ perm2box <- function(N,perm1,perm2){
 
 perm2cube <- function(N,perm1,perm2,perm3){
 
-  xy1 <- getxy_cpp(N,perm1)
-  xy2 <- getxy_cpp(N,perm2)
-  xy3 <- getxy_cpp(N,perm3)
+  # xy1 <- getxy_cpp(N,perm1)
+  # xy2 <- getxy_cpp(N,perm2)
+  # xy3 <- getxy_cpp(N,perm3)
+  Nperm <- lapply(N,function(x) perm1[x])
+  xy1 <- cbind(sapply(Nperm,function(x) c(min(x))),perm1)
+
+  Nperm <- lapply(N,function(x) perm2[x])
+  xy2   <- cbind(sapply(Nperm,function(x) c(min(x))),perm2)
+
+  Nperm <- lapply(N,function(x) perm3[x])
+  xy3   <- cbind(sapply(Nperm,function(x) c(min(x))),perm3)
 
   a <- xy1[,1]
   b <- xy1[,2]
@@ -261,10 +274,23 @@ perm2cube <- function(N,perm1,perm2,perm3){
 
 perm2hyper <- function(N,perm1,perm2,perm3,perm4){
 
-  xy1 <- getxy_cpp(N,perm1)
-  xy2 <- getxy_cpp(N,perm2)
-  xy3 <- getxy_cpp(N,perm3)
-  xy4 <- getxy_cpp(N,perm4)
+  # xy1 <- getxy_cpp(N,perm1)
+  # xy2 <- getxy_cpp(N,perm2)
+  # xy3 <- getxy_cpp(N,perm3)
+  # xy4 <- getxy_cpp(N,perm4)
+
+  Nperm <- lapply(N,function(x) perm1[x])
+  xy1 <- cbind(sapply(Nperm,function(x) c(min(x))),perm1)
+
+  Nperm <- lapply(N,function(x) perm2[x])
+  xy2   <- cbind(sapply(Nperm,function(x) c(min(x))),perm2)
+
+  Nperm <- lapply(N,function(x) perm3[x])
+  xy3   <- cbind(sapply(Nperm,function(x) c(min(x))),perm3)
+
+  Nperm <- lapply(N,function(x) perm4[x])
+  xy4   <- cbind(sapply(Nperm,function(x) c(min(x))),perm4)
+
 
   a <- xy1[,1]
   b <- xy1[,2]
@@ -289,11 +315,26 @@ perm2hyper <- function(N,perm1,perm2,perm3,perm4){
 
 perm2pente <- function(N,perm1,perm2,perm3,perm4,perm5){
 
-  xy1 <- getxy_cpp(N,perm1)
-  xy2 <- getxy_cpp(N,perm2)
-  xy3 <- getxy_cpp(N,perm3)
-  xy4 <- getxy_cpp(N,perm4)
-  xy5 <- getxy_cpp(N,perm5)
+  # xy1 <- getxy_cpp(N,perm1)
+  # xy2 <- getxy_cpp(N,perm2)
+  # xy3 <- getxy_cpp(N,perm3)
+  # xy4 <- getxy_cpp(N,perm4)
+  # xy5 <- getxy_cpp(N,perm5)
+
+  Nperm <- lapply(N,function(x) perm1[x])
+  xy1 <- cbind(sapply(Nperm,function(x) c(min(x))),perm1)
+
+  Nperm <- lapply(N,function(x) perm2[x])
+  xy2   <- cbind(sapply(Nperm,function(x) c(min(x))),perm2)
+
+  Nperm <- lapply(N,function(x) perm3[x])
+  xy3   <- cbind(sapply(Nperm,function(x) c(min(x))),perm3)
+
+  Nperm <- lapply(N,function(x) perm4[x])
+  xy4   <- cbind(sapply(Nperm,function(x) c(min(x))),perm4)
+
+  Nperm <- lapply(N,function(x) perm4[x])
+  xy5   <- cbind(sapply(Nperm,function(x) c(min(x))),perm5)
 
   a <- xy1[,1]
   b <- xy1[,2]

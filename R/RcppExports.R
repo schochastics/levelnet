@@ -5,10 +5,6 @@ getA_cpp <- function(x, y) {
     .Call('_levelnet_getA_cpp', PACKAGE = 'levelnet', x, y)
 }
 
-getxy_cpp <- function(N, perm) {
-    .Call('_levelnet_getxy_cpp', PACKAGE = 'levelnet', N, perm)
-}
-
 mse <- function(adjList, deg) {
     .Call('_levelnet_mse', PACKAGE = 'levelnet', adjList, deg)
 }

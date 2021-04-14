@@ -17,18 +17,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// getxy_cpp
-IntegerMatrix getxy_cpp(List N, IntegerVector perm);
-RcppExport SEXP _levelnet_getxy_cpp(SEXP NSEXP, SEXP permSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< List >::type N(NSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type perm(permSEXP);
-    rcpp_result_gen = Rcpp::wrap(getxy_cpp(N, perm));
-    return rcpp_result_gen;
-END_RCPP
-}
 // mse
 IntegerMatrix mse(List adjList, IntegerVector deg);
 RcppExport SEXP _levelnet_mse(SEXP adjListSEXP, SEXP degSEXP) {
@@ -85,7 +73,6 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_levelnet_getA_cpp", (DL_FUNC) &_levelnet_getA_cpp, 2},
-    {"_levelnet_getxy_cpp", (DL_FUNC) &_levelnet_getxy_cpp, 2},
     {"_levelnet_mse", (DL_FUNC) &_levelnet_mse, 2},
     {"_levelnet_isBipartite", (DL_FUNC) &_levelnet_isBipartite, 3},
     {"_levelnet_scobit_loglike_cpp", (DL_FUNC) &_levelnet_scobit_loglike_cpp, 4},
