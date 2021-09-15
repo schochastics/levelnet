@@ -14,10 +14,8 @@ knitr::opts_chunk$set(
 ```
 
 # levelnet
-
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
- [![Travis build status](https://travis-ci.org/schochastics/levelnet.svg?branch=master)](https://travis-ci.org/schochastics/levelnet)
- [![CRAN status](https://www.r-pkg.org/badges/version/levelnet)](https://CRAN.R-project.org/package=levelnet)
+ [![R-CMD-check](https://github.com/schochastics/levelnet/workflows/R-CMD-check/badge.svg)](https://github.com/schochastics/levelnet/actions)
+[![CRAN status](https://www.r-pkg.org/badges/version/levelnet)](https://CRAN.R-project.org/package=levelnet)
 
 ~~levelnet is, so far, an early-stage R package that can be used to analyse two-mode networks and
 specifically their one-mode projection. The main purpose is to make several methods available that

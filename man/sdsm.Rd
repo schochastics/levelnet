@@ -2,11 +2,13 @@
 % Please edit documentation in R/sdsm.R
 \name{sdsm}
 \alias{sdsm}
+\alias{fsdsm}
 \alias{sdsm_prob}
-\title{Stochastic Degree Sequence Model}
+\title{Flexible Stochastic Degree Sequence Model}
 \usage{
-sdsm(
+fsdsm(
   g,
+  row_constr,
   proj = "true",
   model = "logit",
   max_iter = 1000,
@@ -27,6 +29,8 @@ sdsm_prob(
 \arguments{
 \item{g}{igraph object. The two-mode network}
 
+\item{row_constr}{constraint matrix}
+
 \item{proj}{string. Which mode to project on ("true"/"false")}
 
 \item{model}{string. which link to be used ('logit','probit','cloglog' or 'scobit')}
@@ -43,10 +47,10 @@ sdsm_prob(
 backbone of one-mode projection
 }
 \description{
-Stochastic Degree Sequence Model.
+Flexible Stochastic Degree Sequence Model.
 }
 \details{
-THIS FUNCTION IS DEPRECATED. PLEASE USE THE sdsm() FUNCTION OF THE BACKBONE PACKAGE
+a flexible implementation of the stochastic degree sequence model, allowing for the addition of constraints (use sdsm from the backbone package for the regular model)
 }
 \references{
 Neal, Zachary (2014). The backbone of bipartite projections: Inferring relationships from co-authorship, co-sponsorship, co-attendance and other co-behaviors

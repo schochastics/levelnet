@@ -1,23 +1,24 @@
-#' @title Stochastic Degree Sequence Model
-#' @description Stochastic Degree Sequence Model.
+#' @title Flexible Stochastic Degree Sequence Model
+#' @description Flexible Stochastic Degree Sequence Model.
 #' @name sdsm
 #' @param g igraph object. The two-mode network
+#' @param row_constr constraint matrix
 #' @param proj string. Which mode to project on ("true"/"false")
 #' @param model string. which link to be used ('logit','probit','cloglog' or 'scobit')
 #' @param max_iter number of randomly sampled networks
 #' @param alpha significance level
 #' @param params named parameter list for scobit model
 #' @param verbose print status during execution
-#' @details THIS FUNCTION IS DEPRECATED. PLEASE USE THE sdsm() FUNCTION OF THE BACKBONE PACKAGE
+#' @details a flexible implementation of the stochastic degree sequence model, allowing for the addition of constraints (use sdsm from the backbone package for the regular model)
 #' @return backbone of one-mode projection
 #' @author David Schoch
 #' @references Neal, Zachary (2014). The backbone of bipartite projections: Inferring relationships from co-authorship, co-sponsorship, co-attendance and other co-behaviors
 #' @export
 #'
-sdsm <- function(g,proj="true",model="logit",max_iter=1000,alpha=0.05,
+fsdsm <- function(g,row_constr,proj="true",model="logit",max_iter=1000,alpha=0.05,
                  params=list(b0=0.1,b1=0.00005,b2=0.00005,b3=0.00005,a=0.01),
                  verbose = FALSE){
-  stop("This function is deprecated and will be removed in a future release. Please use the `sdsm` function of the `backbone` package.")
+  warning("This function is deprecated and will be removed in a future release. Please use the `sdsm` function of the `backbone` package.")
   if(!igraph::is_bipartite(g)){
     stop("network is not bipartite")
   }
@@ -47,13 +48,21 @@ sdsm <- function(g,proj="true",model="logit",max_iter=1000,alpha=0.05,
   D_agent <- rep(deg_agent,length(deg_artif))
   D_artif <- rep(deg_artif,each=length(deg_agent))
   resp <- c(A)
-  df <- data.frame(resp,D_agent,D_artif)
+
   if(verbose){
     message(paste0("    Fitting ",model," model\n"))
   }
   if(model!="scobit"){
-    model.fit <- stats::glm(resp ~ D_agent + D_artif + D_agent * D_artif,
-                     family = stats::binomial(link = model),data = df)
+    if(!missing(row_constr)){
+      constr_vec <- rep(row_constr,length(deg_artif))
+      df <- data.frame(resp,D_agent,D_artif,constr_vec)
+      model.fit <- stats::glm(resp ~ D_agent + D_artif + D_agent * D_artif + constr_vec,
+                              family = stats::binomial(link = model),data = df)
+    } else{
+      df <- data.frame(resp,D_agent,D_artif)
+      model.fit <- stats::glm(resp ~ D_agent + D_artif + D_agent * D_artif,
+                              family = stats::binomial(link = model),data = df)
+    }
     df[["prob"]] <- stats::predict(model.fit, newdata = df, type = "response")
   } else{
     y  <- resp

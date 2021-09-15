@@ -2,15 +2,42 @@
 % Please edit documentation in R/supergraphs.R
 \name{superbox_graph}
 \alias{superbox_graph}
-\title{Supergraph with low boxicity}
+\title{Supergraph with given boxicity}
 \usage{
-superbox_graph(g, dim, iter = 5e+05)
+superbox_graph(
+  l,
+  dim = 1,
+  perm = NULL,
+  iter = 15000,
+  temp = 10,
+  tmax = 5,
+  verbose = FALSE
+)
 }
 \arguments{
-\item{g}{igraph object}
+\item{dim}{integer. target boxicity}
 
-\item{dim}{integer. target boxicity (1-5)}
+\item{perm}{starting permutation for SA. If NULL, a random permutation is created}
+
+\item{iter}{integer. number of iterations for SA}
+
+\item{temp}{integer. starting temperature for SA}
+
+\item{tmax}{integer. number of function evaluations at each temperature for SA}
+
+\item{verbose}{logical. print report during SA (defaults to FALSE)}
+
+\item{g}{igraph object}
+}
+\value{
+a list with entries
+\item{perm}{permutation vector. All permutations are concatenated to one long vector}
+\item{ged}{graph edit distance from original graph}
+\item{A}{adjacency matrix of supergraph with given boxicity}
 }
 \description{
-Create supergraph with low boxicity
+Create a supergraph with given boxicity using simulated annealing (SA)
+}
+\references{
+Chandran, L. S., Francis, M. C. & Sivadasan, N. Geometric representation of graphs in low dimension using axis parallel boxes. Algorithmica 56, 129.
 }

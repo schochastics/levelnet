@@ -3,9 +3,7 @@
 
 # levelnet
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![Travis build
-status](https://travis-ci.org/schochastics/levelnet.svg?branch=master)](https://travis-ci.org/schochastics/levelnet)
+[![R-CMD-check](https://github.com/schochastics/levelnet/workflows/R-CMD-check/badge.svg)](https://github.com/schochastics/levelnet/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/levelnet)](https://CRAN.R-project.org/package=levelnet)
 
@@ -60,15 +58,12 @@ functions.
 ``` r
 params <- list(b0 = 1e-5,b1 = 1e-5,b2 = 1e-5,b3 = 1e-5,a = 0.8)
 sdsm_diagnostic(g,verbose = FALSE,params = params)
+#>      name rmse_row rmse_col   time
+#> 1   logit  31.9029  3.52374  2.160
+#> 2  probit  28.5854  3.27539  1.768
+#> 3 cloglog  39.0993  4.20091  4.977
+#> 4  scobit  15.1629  2.71215 16.215
 ```
-
-<img src="man/figures/README-diagnostics-1.png" width="100%" />
-
-    #>      name rmse_row rmse_col   time
-    #> 1   logit  32.6965  3.53625  2.481
-    #> 2  probit  29.1085  3.26062  2.096
-    #> 3 cloglog  38.8249  4.21584  7.336
-    #> 4  scobit  15.4375  2.73470 41.794
 
 The gradient function of the scobit model is very complicated and needs
 to be evaluated many times during the optimization process. This and the
